@@ -27,10 +27,7 @@ class User extends Authenticatable
         'average_rating',
         'role',
     ];
-    public function users(): HasMany
-    {
-        return $this->hasMany(User::class, 'role_id');
-    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -144,7 +141,7 @@ class User extends Authenticatable
         if ($this->role === $roleName) {
             return true;
         }
-        
+
         // Fall back to many-to-many relationship
         return $this->roles()->where('name', $roleName)->exists();
     }

@@ -250,10 +250,18 @@
                 'cancelled': '#dc3545'
             };
             
+            // Calculate percentages for status
+            const statusValues = Object.values(statusCounts);
+            const statusTotal = statusValues.reduce((acc, count) => acc + count, 0);
+            const statusPercentages = statusValues.map(count => ((count / statusTotal) * 100).toFixed(1));
+            
             new Chart(statusCtx, {
                 type: 'pie',
                 data: {
-                    labels: Object.keys(statusCounts).map(status => status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')),
+                    labels: Object.keys(statusCounts).map((status, index) => {
+                        const formattedStatus = status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
+                        return `${formattedStatus}: ${statusPercentages[index]}%`;
+                    }),
                     datasets: [{
                         data: Object.values(statusCounts),
                         backgroundColor: Object.keys(statusCounts).map(status => statusColors[status]),
@@ -265,6 +273,16 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = statusPercentages[context.dataIndex];
+                                    return `${label.split(':')[0]}: ${value} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }

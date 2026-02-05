@@ -328,10 +328,14 @@
                 '#34495e'
             ];
             
+            // Calculate percentages for materials
+            const materialTotal = materialCounts.reduce((acc, count) => acc + count, 0);
+            const materialPercentages = materialCounts.map(count => ((count / materialTotal) * 100).toFixed(1));
+            
             new Chart(materialsCtx, {
                 type: 'pie',
                 data: {
-                    labels: materialCategories,
+                    labels: materialCategories.map((category, index) => `${category}: ${materialPercentages[index]}%`),
                     datasets: [{
                         data: materialCounts,
                         backgroundColor: materialColors.slice(0, materialCategories.length),
@@ -343,6 +347,16 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = materialPercentages[context.dataIndex];
+                                    return `${label.split(':')[0]}: ${value} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }
@@ -365,10 +379,15 @@
                 'Out of Order': '#dc3545'
             };
             
+            // Calculate percentages for equipment status
+            const equipmentValues = Object.values(equipmentStatus);
+            const equipmentTotal = equipmentValues.reduce((acc, count) => acc + count, 0);
+            const equipmentPercentages = equipmentValues.map(count => ((count / equipmentTotal) * 100).toFixed(1));
+            
             new Chart(equipmentCtx, {
                 type: 'pie',
                 data: {
-                    labels: Object.keys(equipmentStatus),
+                    labels: Object.keys(equipmentStatus).map((status, index) => `${status}: ${equipmentPercentages[index]}%`),
                     datasets: [{
                         data: Object.values(equipmentStatus),
                         backgroundColor: Object.keys(equipmentStatus).map(status => statusColors[status]),
@@ -380,6 +399,16 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = equipmentPercentages[context.dataIndex];
+                                    return `${label.split(':')[0]}: ${value} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }

@@ -286,10 +286,15 @@
                 'Other': '#6c757d'
             };
             
+            // Calculate percentages for actions
+            const actionValues = Object.values(actionCounts);
+            const actionTotal = actionValues.reduce((acc, count) => acc + count, 0);
+            const actionPercentages = actionValues.map(count => ((count / actionTotal) * 100).toFixed(1));
+            
             new Chart(actionsCtx, {
                 type: 'pie',
                 data: {
-                    labels: Object.keys(actionCounts),
+                    labels: Object.keys(actionCounts).map((action, index) => `${action}: ${actionPercentages[index]}%`),
                     datasets: [{
                         data: Object.values(actionCounts),
                         backgroundColor: Object.keys(actionCounts).map(action => actionColors[action]),
@@ -301,6 +306,16 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = actionPercentages[context.dataIndex];
+                                    return `${label.split(':')[0]}: ${value} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }

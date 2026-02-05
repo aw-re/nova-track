@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Team Info</title>
+    <style>
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        #info-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            border: 1px solid #e1e1e1;
+            border-radius: 10px;
+            padding: 20px;
+            width: auto;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            object-fit: cover;
+            border: 3px solid #f0f0f0;
+        }
+
+        .team-name {
+            font-weight: 600;
+            font-size: 1em;
+            margin: 0;
+            color: #444;
+        }
+        
+        @media (max-width: 600px) {
+            #info-container {
+                gap: 15px;
+            }
+            .team-card {
+                width: 140px;
+                padding: 15px;
+            }
+            .team-img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h2>Team Info</h2>
+        <div id="info-container"></div>
+    </div>
+
+    <script>
+        const Team = [
+            {
+                name: "MOHAMMED AL-MANSOUR",
+                image: "images/Al-Mansour.jpg",
+            },
+            {
+                name: "ABDULWAHAB AL-REYASHI",
+                image: "images/AL-REYASHI.jpg",
+            },
+            {
+                name: "MOHAMMED HANDHAL",
+                image: "images/Handhal.jpg",
+            },
+            {
+                name: "MOHAMMED AL-NAJHI",
+                image: "images/Al-najhi.jpg",
+            },
+            {
+                name: "NAJI AL-BASHA",
+                image: "images/Naji.jpg",
+            },
+        ];
+
+        const infoContainer = document.getElementById("info-container");
+
+        function renderTeam(arr) {
+            let info = "";
+            for (let i = 0; i < arr.length; i++) {
+                info += `
+                    <div class="team-card">
+                        <img class="team-img" src="${arr[i].image}" alt="Member Image" />
+                        <p class="team-name">${arr[i].name}</p>
+                    </div>
+                `;
+            }
+
+            infoContainer.innerHTML = info;
+        }
+
+        renderTeam(Team);
+    </script>
+</body>
+
+</html>

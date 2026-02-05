@@ -204,6 +204,10 @@
         </div>
     </section>
 
+    <section class="container my-5">
+        @include('team')
+    </section>
+
     <footer class="bg-dark text-white py-4">
         <div class="container text-center">
             <p>{!! __('app.copyright', ['year' => date('Y')]) !!}</p>

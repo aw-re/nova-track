@@ -74,6 +74,7 @@
     <div class="container">
         <div class="login-container">
             <div class="login-logo">
+                <img src="{{ asset('images/logo.png') }}" alt="NovaTrack Logo" class="img-fluid mb-3" style="max-height: 100px;">
                 <h1>{{ __('app.app_name') }}</h1>
                 <p class="text-muted">{{ __('app.app_description') }}</p>
             </div>

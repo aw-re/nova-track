@@ -159,10 +159,17 @@
                 '#e74c3c'  // contractor
             ];
             
+            // Calculate percentages
+            const total = roleCounts.reduce((acc, count) => acc + count, 0);
+            const percentages = roleCounts.map(count => ((count / total) * 100).toFixed(1));
+            
             new Chart(ctx, {
                 type: 'pie',
                 data: {
-                    labels: roleLabels.map(role => role.charAt(0).toUpperCase() + role.slice(1).replace('_', ' ')),
+                    labels: roleLabels.map((role, index) => {
+                        const formattedRole = role.charAt(0).toUpperCase() + role.slice(1).replace('_', ' ');
+                        return `${formattedRole}: ${percentages[index]}%`;
+                    }),
                     datasets: [{
                         data: roleCounts,
                         backgroundColor: colors.slice(0, roleLabels.length),
@@ -174,6 +181,16 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = percentages[context.dataIndex];
+                                    return `${label.split(':')[0]}: ${value} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }

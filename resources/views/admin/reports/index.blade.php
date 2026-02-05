@@ -272,10 +272,15 @@
                 'Financial': '#007bff'
             };
             
+            // Calculate percentages for report types
+            const typeValues = Object.values(reportTypes);
+            const typeTotal = typeValues.reduce((acc, count) => acc + count, 0);
+            const typePercentages = typeValues.map(count => ((count / typeTotal) * 100).toFixed(1));
+            
             new Chart(typeCtx, {
                 type: 'pie',
                 data: {
-                    labels: Object.keys(reportTypes),
+                    labels: Object.keys(reportTypes).map((type, index) => `${type}: ${typePercentages[index]}%`),
                     datasets: [{
                         data: Object.values(reportTypes),
                         backgroundColor: Object.keys(reportTypes).map(type => typeColors[type]),
@@ -287,6 +292,16 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const percentage = typePercentages[context.dataIndex];
+                                    return `${label.split(':')[0]}: ${value} (${percentage}%)`;
+                                }
+                            }
                         }
                     }
                 }

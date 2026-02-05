@@ -22,6 +22,7 @@
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
                 <div class="text-center mb-4">
+                    <img src="{{ asset('images/logo.png') }}" alt="NovaTrack Logo" class="img-fluid mb-2" style="max-height: 80px;">
                     <h3>{{ __('app.app_name') }}</h3>
                     <p class="text-muted small">{{ __('app.app_description') }}</p>
                 </div>
@@ -38,7 +39,10 @@
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".sidebar">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-                        <span class="navbar-brand">@yield('page_title', 'Dashboard')</span>
+                        <div class="d-flex align-items-center">
+                            <img src="{{ asset('images/logo.png') }}" alt="NovaTrack Logo" class="me-2" style="height: 40px;">
+                            <span class="navbar-brand">@yield('page_title', 'Dashboard')</span>
+                        </div>
                         <div class="d-flex">
                             <!-- Language Switcher -->
                             <div class="dropdown me-3">
