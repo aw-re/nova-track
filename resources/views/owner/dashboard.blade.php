@@ -38,237 +38,175 @@
 @endsection
 
 @section('content')
-    <div class="row">
+@section('content')
+    <!-- Statistics Row -->
+    <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <div class="card stat-card primary">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="stat-value">{{ $projectCount }}</div>
-                            <div class="stat-label">{{ __('app.my_projects') }}</div>
-                        </div>
-                        <div class="stat-icon">
-                            <i class="fas fa-project-diagram"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <x-stats-card 
+                type="primary" 
+                value="{{ $projectCount }}" 
+                label="{{ __('app.my_projects') }}" 
+                icon="fas fa-project-diagram" 
+            />
         </div>
         <div class="col-md-3">
-            <div class="card stat-card success">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="stat-value">{{ $taskCount }}</div>
-                            <div class="stat-label">{{ __('app.total_tasks') }}</div>
-                        </div>
-                        <div class="stat-icon">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <x-stats-card 
+                type="success" 
+                value="{{ $taskCount }}" 
+                label="{{ __('app.total_tasks') }}" 
+                icon="fas fa-tasks" 
+            />
         </div>
         <div class="col-md-3">
-            <div class="card stat-card warning">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="stat-value">{{ $pendingReportCount }}</div>
-                            <div class="stat-label">{{ __('app.pending_reports') }}</div>
-                        </div>
-                        <div class="stat-icon">
-                            <i class="fas fa-file-alt"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <x-stats-card 
+                type="warning" 
+                value="{{ $pendingReportCount }}" 
+                label="{{ __('app.pending_reports') }}" 
+                icon="fas fa-file-alt" 
+            />
         </div>
         <div class="col-md-3">
-            <div class="card stat-card danger">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div class="stat-value">{{ $pendingResourceRequestCount }}</div>
-                            <div class="stat-label">{{ __('app.pending_requests') }}</div>
-                        </div>
-                        <div class="stat-icon">
-                            <i class="fas fa-tools"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <x-stats-card 
+                type="danger" 
+                value="{{ $pendingResourceRequestCount }}" 
+                label="{{ __('app.pending_requests') }}" 
+                icon="fas fa-tools" 
+            />
         </div>
     </div>
 
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-project-diagram me-2"></i> {{ __('app.recent_projects') }}
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
+    <div class="row g-4">
+        <!-- Recent Projects -->
+        <div class="col-lg-6">
+            <x-app-card title="{{ __('app.recent_projects') }}" icon="fas fa-project-diagram">
+                <x-slot name="actions">
+                    <a href="{{ route('owner.projects.index') }}" class="btn btn-sm btn-light text-primary">
+                        <i class="fas fa-arrow-right"></i> {{ __('app.view_all') }}
+                    </a>
+                </x-slot>
+
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="border-0">{{ __('app.name') }}</th>
+                                <th class="border-0">{{ __('app.status') }}</th>
+                                <th class="border-0">{{ __('app.progress') }}</th>
+                                <th class="border-0 text-end">{{ __('app.action') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recentProjects as $project)
                                 <tr>
-                                    <th>{{ __('app.name') }}</th>
-                                    <th>{{ __('app.project_status') }}</th>
-                                    <th>{{ __('app.progress') }}</th>
-                                    <th>{{ __('app.action') }}</th>
+                                    <td class="fw-bold text-dark">{{ $project->name }}</td>
+                                    <td>
+                                        @if($project->status == 'planning')
+                                            <span class="badge bg-info bg-opacity-10 text-info">Planning</span>
+                                        @elseif($project->status == 'in_progress')
+                                            <span class="badge bg-primary bg-opacity-10 text-primary">In Progress</span>
+                                        @elseif($project->status == 'completed')
+                                            <span class="badge bg-success bg-opacity-10 text-success">Completed</span>
+                                        @else
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ $project->status }}</span>
+                                        @endif
+                                    </td>
+                                    <td style="width: 30%">
+                                        @php
+                                            $total = $project->tasks->count();
+                                            $done = $project->tasks->where('status', 'completed')->count();
+                                            $pct = $total > 0 ? round(($done / $total) * 100) : 0;
+                                        @endphp
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $pct }}%"></div>
+                                        </div>
+                                        <div class="small text-muted mt-1">{{ $pct }}%</div>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ route('owner.projects.show', $project) }}" class="btn btn-icon btn-sm btn-light">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($recentProjects as $project)
-                                    <tr>
-                                        <td>{{ $project->name }}</td>
-                                        <td>
-                                            @if($project->status == 'planning')
-                                                <span class="badge bg-info">{{ __('app.status_planning') }}</span>
-                                            @elseif($project->status == 'in_progress')
-                                                <span class="badge bg-primary">{{ __('app.status_in_progress') }}</span>
-                                            @elseif($project->status == 'on_hold')
-                                                <span class="badge bg-warning">{{ __('app.status_on_hold') }}</span>
-                                            @elseif($project->status == 'completed')
-                                                <span class="badge bg-success">{{ __('app.status_completed') }}</span>
-                                            @elseif($project->status == 'cancelled')
-                                                <span class="badge bg-danger">{{ __('app.status_cancelled') }}</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @php
-                                                $completedTasks = $project->tasks->where('status', 'completed')->count();
-                                                $totalTasks = $project->tasks->count();
-                                                $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
-                                            @endphp
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" style="width: {{ $progress }}%;" aria-valuenow="{{ $progress }}" aria-valuemin="0" aria-valuemax="100">{{ $progress }}%</div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('owner.projects.show', $project) }}" class="btn btn-sm btn-primary">{{ __('app.view') }}</a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center">{{ __('app.no_projects_found') }}</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-4">{{ __('app.no_projects_found') }}</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
-                <div class="card-footer text-end">
-                    <a href="{{ route('owner.projects.index') }}" class="btn btn-sm btn-outline-primary">{{ __('app.view_all_projects') }}</a>
-                </div>
-            </div>
+            </x-app-card>
         </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-tasks me-2"></i> Recent Tasks
+
+        <!-- Recent Tasks -->
+        <div class="col-lg-6">
+            <x-app-card title="Recent Tasks" icon="fas fa-tasks">
+                <x-slot name="actions">
+                    <a href="{{ route('owner.tasks.index') }}" class="btn btn-sm btn-light text-primary">
+                        <i class="fas fa-arrow-right"></i> View All
+                    </a>
+                </x-slot>
+
+                <div class="list-group list-group-flush">
+                    @forelse($recentTasks as $task)
+                        <div class="list-group-item border-0 px-0 d-flex justify-content-between align-items-center mb-2 rounded hover-bg-light">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-circle bg-light text-primary me-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">{{ $task->title }}</h6>
+                                    <small class="text-muted">{{ $task->project->name }} • Due {{ $task->due_date ? date('M d', strtotime($task->due_date)) : 'N/A' }}</small>
+                                </div>
+                            </div>
+                            <span class="badge rounded-pill {{ $task->status == 'completed' ? 'bg-success' : 'bg-primary' }}">
+                                {{ str_replace('_', ' ', ucfirst($task->status)) }}
+                            </span>
+                        </div>
+                    @empty
+                        <div class="text-center text-muted py-4">No tasks found.</div>
+                    @endforelse
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Project</th>
-                                    <th>Status</th>
-                                    <th>Due Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($recentTasks as $task)
-                                    <tr>
-                                        <td>{{ $task->title }}</td>
-                                        <td>{{ $task->project->name }}</td>
-                                        <td>
-                                            @if($task->status == 'backlog')
-                                                <span class="badge bg-secondary">Backlog</span>
-                                            @elseif($task->status == 'todo')
-                                                <span class="badge bg-info">To Do</span>
-                                            @elseif($task->status == 'in_progress')
-                                                <span class="badge bg-primary">In Progress</span>
-                                            @elseif($task->status == 'review')
-                                                <span class="badge bg-warning">Review</span>
-                                            @elseif($task->status == 'completed')
-                                                <span class="badge bg-success">Completed</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ $task->due_date ? date('M d, Y', strtotime($task->due_date)) : 'No due date' }}</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="4" class="text-center">No tasks found.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="card-footer text-end">
-                    <a href="{{ route('owner.tasks.index') }}" class="btn btn-sm btn-outline-primary">View All Tasks</a>
-                </div>
-            </div>
+            </x-app-card>
         </div>
     </div>
-
-    <div class="row mt-4">
+    
+    <!-- Pending Items Row -->
+    <div class="row g-4 mt-1">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-file-alt me-2"></i> Pending Reports
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        @forelse($pendingReports as $report)
-                            <li class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong>{{ $report->title }}</strong>
-                                        <div class="text-muted small">{{ $report->project->name }} - {{ $report->report_type }}</div>
-                                    </div>
-                                    <a href="{{ route('owner.reports.show', $report) }}" class="btn btn-sm btn-primary">Review</a>
-                                </div>
-                            </li>
-                        @empty
-                            <li class="list-group-item">No pending reports found.</li>
-                        @endforelse
-                    </ul>
-                </div>
-                <div class="card-footer text-end">
-                    <a href="{{ route('owner.reports.index') }}" class="btn btn-sm btn-outline-primary">View All Reports</a>
-                </div>
-            </div>
+            <x-app-card title="{{ __('app.pending_reports') }}" icon="fas fa-file-invoice">
+                 <ul class="list-group list-group-flush">
+                    @forelse($pendingReports as $report)
+                        <li class="list-group-item px-0 d-flex justify-content-between align-items-center border-0 border-bottom">
+                            <div>
+                                <h6 class="mb-0 fw-semibold">{{ $report->title }}</h6>
+                                <small class="text-muted">{{ $report->project->name }} - {{ ucfirst($report->report_type) }}</small>
+                            </div>
+                            <a href="{{ route('owner.reports.show', $report) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Review</a>
+                        </li>
+                    @empty
+                        <li class="text-center text-muted py-3">No pending reports.</li>
+                    @endforelse
+                </ul>
+            </x-app-card>
         </div>
+        
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-tools me-2"></i> Pending Resource Requests
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        @forelse($pendingResourceRequests as $request)
-                            <li class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong>{{ $request->resource_name }}</strong> ({{ $request->quantity }} {{ $request->unit }})
-                                        <div class="text-muted small">{{ $request->project->name }} - Requested by {{ $request->requestedBy->name }}</div>
-                                    </div>
-                                    <a href="{{ route('owner.resource-requests.show', $request) }}" class="btn btn-sm btn-primary">Review</a>
-                                </div>
-                            </li>
-                        @empty
-                            <li class="list-group-item">No pending resource requests found.</li>
-                        @endforelse
-                    </ul>
-                </div>
-                <div class="card-footer text-end">
-                    <a href="{{ route('owner.resource-requests.index') }}" class="btn btn-sm btn-outline-primary">View All Requests</a>
-                </div>
-            </div>
+            <x-app-card title="{{ __('app.pending_requests') }}" icon="fas fa-hard-hat">
+                <ul class="list-group list-group-flush">
+                    @forelse($pendingResourceRequests as $request)
+                        <li class="list-group-item px-0 d-flex justify-content-between align-items-center border-0 border-bottom">
+                            <div>
+                                <h6 class="mb-0 fw-semibold">{{ $request->resource_name ?? 'Material Request' }}</h6>
+                                <small class="text-muted">{{ $request->project->name }} • Qty: {{ $request->quantity }}</small>
+                            </div>
+                            <a href="{{ route('owner.resource-requests.show', $request) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Review</a>
+                        </li>
+                    @empty
+                         <li class="text-center text-muted py-3">No pending requests.</li>
+                    @endforelse
+                </ul>
+            </x-app-card>
         </div>
     </div>
 @endsection

@@ -51,6 +51,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Language Switcher Route
+Route::get('lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'ar'])) {
+        session()->put('locale', $locale);
+    }
+    return redirect()->back();
+})->name('language.switch');
+
 
 use App\Http\Controllers\Owner\TaskUpdateController;
 

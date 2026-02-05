@@ -1,195 +1,132 @@
-# Construction Project Management System (CPMS)
+# NovaTrack 🏗️
+## Modern Construction Project Management System (CPMS)
 
-A comprehensive Laravel-based system for managing construction projects with multiple user roles, task management, resource tracking, and reporting features.
+**NovaTrack** is a state-of-the-art, Laravel-based platform designed to streamline construction project management. It features a premium **Glassmorphism UI**, full **Arabic/English localization**, and a robust role-based permission system.
 
-## Features
+![NovaTrack Badge](https://img.shields.io/badge/NovaTrack-v2.0-blueviolet?style=for-the-badge&logo=laravel)
+![Status](https://img.shields.io/badge/Status-Stable-success?style=for-the-badge)
 
-- **Multi-Role User System**:
-  - Admin: System management and oversight
-  - Project Owner: Project creation and management
-  - Engineer: Technical oversight and task assignment
-  - Contractor: Task execution and resource requests
+---
 
-- **Project Management**:
-  - Create, edit, and track construction projects
-  - Assign team members to projects
-  - Monitor project progress and status
+## ✨ Key Features
 
-- **Task Management**:
-  - Create and assign tasks to team members
-  - Track task status and completion
-  - Update task progress
+### 🎨 Modern UI/UX
+- **Glassmorphism Design**: A premium, frosted-glass aesthetic using modern CSS variables.
+- **Responsive Layout**: Fully responsive dashboard supporting mobile and desktop.
+- **Blade Components**: Reusable UI components for consistent design (Stats Cards, App Cards).
 
-- **Resource Management**:
-  - Request construction materials and equipment
-  - Approve or reject resource requests
-  - Track resource allocation
+### 🌍 Localization (En/Ar)
+- **Bilingual Support**: Full support for English and Arabic.
+- **Auto RTL/LTR**: Interface direction changes automatically based on language selection.
+- **Language Switcher**: Seamless toggling between languages via the navbar.
 
-- **Reporting System**:
-  - Submit technical and progress reports
-  - Review and approve reports
-  - Generate project status reports
+### 🛡️ Role-Based Access Control (RBAC)
+- **Admin**: Full system oversight and configuration.
+- **Project Owner**: Manage projects, view reports, and approve requests.
+- **Engineer**: Assign tasks, review technical details, and manage sites.
+- **Contractor**: Execute tasks, update progress, and request resources.
 
-- **File Management**:
-  - Upload and download project files
-  - Organize files by project
-  - Track file versions
+---
 
-- **Notifications & Activity Logs**:
-  - Real-time notifications for important events
-  - Comprehensive activity tracking
-  - Audit trail for all system actions
+## 🚀 Quick Installation Guide
 
-## System Requirements
+We have optimized the installation process to avoid common database issues. Follow these steps for a **guaranteed clean install**.
 
-- PHP 8.1 or higher
-- MySQL 5.7 or higher
+### Prerequisites
+- PHP 8.1+
 - Composer
-- Node.js and NPM (for asset compilation)
-- XAMPP, WAMP, LAMP, or similar local development environment
+- MySQL Database
 
-## Installation
-
-1. Clone the repository or extract the ZIP file to your local environment
-
-2. Navigate to the project directory:
-   ```
-   cd cpms
+### Steps
+1. **Clone the Project**
+   ```bash
+   git clone https://github.com/your-repo/nova-track.git
+   cd nova-track
    ```
 
-3. Install PHP dependencies:
-   ```
+2. **Install Dependencies**
+   ```bash
    composer install
+   npm install
    ```
 
-4. Copy the environment file:
-   ```
+3. **Configure Environment**
+   ```bash
    cp .env.example .env
-   ```
-
-5. Generate application key:
-   ```
    php artisan key:generate
    ```
+   *Edit `.env` and set your database credentials (`DB_DATABASE=cpms`, `DB_USERNAME`, etc.).*
 
-6. Configure your database in the `.env` file:
-   ```
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=cpms
-   DB_USERNAME=root
-   DB_PASSWORD=
-   ```
+4. **Database Setup (The Easy Way)**
+   Instead of running migrations which might fail due to conflicts, use our **Clean Install SQL**:
+   - Open **phpMyAdmin**.
+   - Create a database named `cpms`.
+   - Go to **Import**.
+   - Select the file: `database/final_clean_install.sql`.
+   - Click **Go**.
+   
+   *> This will automatically set up all tables, foreign keys, and seed the default users.*
 
-7. Run database migrations and seed with test data:
-   ```
-   php artisan migrate --seed
-   ```
-
-8. Create test users for each role:
-   ```
-   php artisan db:seed --class=TestUserSeeder
-   ```
-
-9. Start the development server:
-   ```
+5. **Run the Server**
+   ```bash
    php artisan serve
    ```
+   Visit `http://localhost:8000`.
 
-10. Access the application at `http://localhost:8000`
+---
 
-## Test Accounts
+## 🔑 Login Credentials
 
-The system comes with pre-configured test accounts for each user role:
+All accounts use the password: **`password`**
 
-- **Admin**:
-  - Email: admin@example.com
-  - Password: password
+| Role | Email | Access Level |
+|------|-------|--------------|
+| **Admin** | `admin@example.com` | Full System Access |
+| **Project Owner** | `owner@example.com` | Project Management Dashboard |
+| **Engineer** | `engineer@example.com` | Technical & Tasks Dashboard |
+| **Contractor** | `contractor@example.com` | Execution & Requests |
 
-- **Project Owner**:
-  - Email: owner@example.com
-  - Password: password
+---
 
-- **Engineer**:
-  - Email: engineer@example.com
-  - Password: password
+## 🛠️ Technology Stack
 
-- **Contractor**:
-  - Email: contractor@example.com
-  - Password: password
+- **Framework**: Laravel 10.x
+- **Frontend**: Blade Templates + Bootstrap 5
+- **Styling**: Custom `novatrack.css` (Glassmorphism) + FontAwesome
+- **Fonts**: Cairo (Arabic) & Poppins (English)
+- **Database**: MySQL
 
-## System Structure
+---
 
-### Models
+## 📁 Project Structure
 
-- **User**: Manages user accounts with role-based permissions
-- **Role**: Defines user roles and permissions
-- **Project**: Manages construction project details
-- **Task**: Handles task assignments and tracking
-- **Report**: Manages technical and progress reports
-- **ResourceRequest**: Handles material and equipment requests
-- **File**: Manages document uploads and downloads
-- **Notification**: Handles system notifications
-- **ActivityLog**: Tracks user actions in the system
+```
+nova-track/
+├── app/
+│   ├── Http/Controllers/  # Controllers for Admin, Owner, Engineer...
+│   ├── Models/            # Eloquent Models
+│   └── View/Components/   # UI Components (StatsCard, AppCard)
+├── database/
+│   ├── final_clean_install.sql  # ✨ MASTER SETUP SCRIPT
+│   └── migrations/        # Database history
+├── resources/
+│   ├── lang/              # Localization (en/ar)
+│   ├── views/             # Blade Templates
+│   └── css/               # Custom Styles
+└── routes/
+    └── web.php            # Routes with Role Middleware
+```
 
-### Controllers
+---
 
-- **Admin Controllers**: Manage system-wide settings and users
-- **Owner Controllers**: Handle project creation and management
-- **Engineer Controllers**: Manage technical aspects and task assignment
-- **Contractor Controllers**: Handle task execution and updates
+## 🤝 Contributing
 
-### Views
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-- **Layouts**: Common page layouts and components
-- **Admin Views**: System management interfaces
-- **Owner Views**: Project management interfaces
-- **Engineer Views**: Technical management interfaces
-- **Contractor Views**: Task execution interfaces
+---
 
-## Workflow Examples
-
-### Project Creation Workflow
-
-1. Project Owner logs in
-2. Creates a new project with details
-3. Invites Engineers and Contractors
-4. Sets up initial tasks
-5. Monitors progress
-
-### Task Management Workflow
-
-1. Engineer creates tasks
-2. Assigns tasks to Contractors
-3. Contractor updates task progress
-4. Engineer reviews and approves completion
-5. Project Owner monitors overall progress
-
-### Resource Request Workflow
-
-1. Contractor identifies needed resources
-2. Submits resource request
-3. Engineer reviews and recommends
-4. Project Owner approves or rejects
-5. Resources are allocated to the project
-
-## Customization
-
-The system is built with Laravel, making it highly customizable:
-
-- Add new user roles by modifying the Role model and seeders
-- Extend project attributes in the Project model
-- Customize workflows by modifying controllers
-- Add new features by creating new models, controllers, and views
-
-## Troubleshooting
-
-- **Database Connection Issues**: Verify your database credentials in the `.env` file
-- **Missing Dependencies**: Run `composer install` to ensure all packages are installed
-- **Permission Issues**: Ensure storage and bootstrap/cache directories are writable
-- **Role Assignment Problems**: Check the role_user pivot table for proper associations
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+*Built with ❤️ for Modern Construction Management.*
