@@ -5,73 +5,51 @@
 @section('page_title', __('app.owner_dashboard'))
 
 @section('sidebar')
-    <li class="nav-item">
-        <a class="nav-link active" href="{{ route('owner.dashboard') }}">
-            <i class="fas fa-tachometer-alt"></i> {{ __('app.dashboard') }}
+    <div class="list-group list-group-flush">
+        <a href="{{ route('owner.dashboard') }}"
+            class="list-group-item list-group-item-action bg-white text-primary fw-bold border-start border-4 border-primary">
+            <i class="fas fa-tachometer-alt me-2"></i> {{ __('app.dashboard') }}
         </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('owner.projects.index') }}">
-            <i class="fas fa-project-diagram"></i> {{ __('app.projects') }}
+        <a href="{{ route('owner.projects.index') }}"
+            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+            <i class="fas fa-project-diagram me-2"></i> {{ __('app.projects') }}
         </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('owner.tasks.index') }}">
-            <i class="fas fa-tasks"></i> {{ __('app.tasks') }}
+        <a href="{{ route('owner.tasks.index') }}"
+            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+            <i class="fas fa-tasks me-2"></i> {{ __('app.tasks') }}
         </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('owner.reports.index') }}">
-            <i class="fas fa-file-alt"></i> {{ __('app.reports') }}
+        <a href="{{ route('owner.reports.index') }}"
+            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+            <i class="fas fa-file-alt me-2"></i> {{ __('app.reports') }}
         </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('owner.resource-requests.index') }}">
-            <i class="fas fa-tools"></i> {{ __('app.resources') }}
+        <a href="{{ route('owner.resource-requests.index') }}"
+            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+            <i class="fas fa-tools me-2"></i> {{ __('app.resources') }}
         </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('owner.files.index') }}">
-            <i class="fas fa-file"></i> {{ __('app.files') }}
+        <a href="{{ route('owner.files.index') }}"
+            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+            <i class="fas fa-file me-2"></i> {{ __('app.files') }}
         </a>
-    </li>
+    </div>
 @endsection
 
-@section('content')
 @section('content')
     <!-- Statistics Row -->
     <div class="row g-4 mb-4">
         <div class="col-md-3">
-            <x-stats-card 
-                type="primary" 
-                value="{{ $projectCount }}" 
-                label="{{ __('app.my_projects') }}" 
-                icon="fas fa-project-diagram" 
-            />
+            <x-stats-card type="primary" value="{{ $projectCount }}" label="{{ __('app.my_projects') }}"
+                icon="fas fa-project-diagram" />
         </div>
         <div class="col-md-3">
-            <x-stats-card 
-                type="success" 
-                value="{{ $taskCount }}" 
-                label="{{ __('app.total_tasks') }}" 
-                icon="fas fa-tasks" 
-            />
+            <x-stats-card type="success" value="{{ $taskCount }}" label="{{ __('app.total_tasks') }}" icon="fas fa-tasks" />
         </div>
         <div class="col-md-3">
-            <x-stats-card 
-                type="warning" 
-                value="{{ $pendingReportCount }}" 
-                label="{{ __('app.pending_reports') }}" 
-                icon="fas fa-file-alt" 
-            />
+            <x-stats-card type="warning" value="{{ $pendingReportCount }}" label="{{ __('app.pending_reports') }}"
+                icon="fas fa-file-alt" />
         </div>
         <div class="col-md-3">
-            <x-stats-card 
-                type="danger" 
-                value="{{ $pendingResourceRequestCount }}" 
-                label="{{ __('app.pending_requests') }}" 
-                icon="fas fa-tools" 
-            />
+            <x-stats-card type="danger" value="{{ $pendingResourceRequestCount }}" label="{{ __('app.pending_requests') }}"
+                icon="fas fa-tools" />
         </div>
     </div>
 
@@ -100,15 +78,8 @@
                                 <tr>
                                     <td class="fw-bold text-dark">{{ $project->name }}</td>
                                     <td>
-                                        @if($project->status == 'planning')
-                                            <span class="badge bg-info bg-opacity-10 text-info">Planning</span>
-                                        @elseif($project->status == 'in_progress')
-                                            <span class="badge bg-primary bg-opacity-10 text-primary">In Progress</span>
-                                        @elseif($project->status == 'completed')
-                                            <span class="badge bg-success bg-opacity-10 text-success">Completed</span>
-                                        @else
-                                            <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ $project->status }}</span>
-                                        @endif
+                                        <span
+                                            class="badge bg-primary bg-opacity-10 text-primary">{{ ucfirst($project->status) }}</span>
                                     </td>
                                     <td style="width: 30%">
                                         @php
@@ -117,12 +88,14 @@
                                             $pct = $total > 0 ? round(($done / $total) * 100) : 0;
                                         @endphp
                                         <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $pct }}%"></div>
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ $pct }}%">
+                                            </div>
                                         </div>
                                         <div class="small text-muted mt-1">{{ $pct }}%</div>
                                     </td>
                                     <td class="text-end">
-                                        <a href="{{ route('owner.projects.show', $project) }}" class="btn btn-icon btn-sm btn-light">
+                                        <a href="{{ route('owner.projects.show', $project) }}"
+                                            class="btn btn-icon btn-sm btn-light">
                                             <i class="fas fa-chevron-right"></i>
                                         </a>
                                     </td>
@@ -149,19 +122,20 @@
 
                 <div class="list-group list-group-flush">
                     @forelse($recentTasks as $task)
-                        <div class="list-group-item border-0 px-0 d-flex justify-content-between align-items-center mb-2 rounded hover-bg-light">
+                        <div
+                            class="list-group-item border-0 px-0 d-flex justify-content-between align-items-center mb-2 rounded hover-bg-light">
                             <div class="d-flex align-items-center">
-                                <div class="icon-circle bg-light text-primary me-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <div class="icon-circle bg-light text-primary me-3 rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width: 40px; height: 40px;">
                                     <i class="fas fa-check-circle"></i>
                                 </div>
                                 <div>
                                     <h6 class="mb-0 fw-bold">{{ $task->title }}</h6>
-                                    <small class="text-muted">{{ $task->project->name }} • Due {{ $task->due_date ? date('M d', strtotime($task->due_date)) : 'N/A' }}</small>
+                                    <small class="text-muted">{{ $task->project->name }} • Due
+                                        {{ $task->due_date ? date('M d', strtotime($task->due_date)) : 'N/A' }}</small>
                                 </div>
                             </div>
-                            <span class="badge rounded-pill {{ $task->status == 'completed' ? 'bg-success' : 'bg-primary' }}">
-                                {{ str_replace('_', ' ', ucfirst($task->status)) }}
-                            </span>
+                            <x-badge :status="$task->status" />
                         </div>
                     @empty
                         <div class="text-center text-muted py-4">No tasks found.</div>
@@ -170,50 +144,4 @@
             </x-app-card>
         </div>
     </div>
-    
-    <!-- Pending Items Row -->
-    <div class="row g-4 mt-1">
-        <div class="col-md-6">
-            <x-app-card title="{{ __('app.pending_reports') }}" icon="fas fa-file-invoice">
-                 <ul class="list-group list-group-flush">
-                    @forelse($pendingReports as $report)
-                        <li class="list-group-item px-0 d-flex justify-content-between align-items-center border-0 border-bottom">
-                            <div>
-                                <h6 class="mb-0 fw-semibold">{{ $report->title }}</h6>
-                                <small class="text-muted">{{ $report->project->name }} - {{ ucfirst($report->report_type) }}</small>
-                            </div>
-                            <a href="{{ route('owner.reports.show', $report) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Review</a>
-                        </li>
-                    @empty
-                        <li class="text-center text-muted py-3">No pending reports.</li>
-                    @endforelse
-                </ul>
-            </x-app-card>
-        </div>
-        
-        <div class="col-md-6">
-            <x-app-card title="{{ __('app.pending_requests') }}" icon="fas fa-hard-hat">
-                <ul class="list-group list-group-flush">
-                    @forelse($pendingResourceRequests as $request)
-                        <li class="list-group-item px-0 d-flex justify-content-between align-items-center border-0 border-bottom">
-                            <div>
-                                <h6 class="mb-0 fw-semibold">{{ $request->resource_name ?? 'Material Request' }}</h6>
-                                <small class="text-muted">{{ $request->project->name }} • Qty: {{ $request->quantity }}</small>
-                            </div>
-                            <a href="{{ route('owner.resource-requests.show', $request) }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Review</a>
-                        </li>
-                    @empty
-                         <li class="text-center text-muted py-3">No pending requests.</li>
-                    @endforelse
-                </ul>
-            </x-app-card>
-        </div>
-    </div>
-@endsection
-
-@section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Add any dashboard-specific JavaScript here
-    </script>
 @endsection
