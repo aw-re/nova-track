@@ -42,6 +42,14 @@ class Project extends Model
     }
 
     /**
+     * Alias for members() - for backward compatibility.
+     */
+    public function projectMembers()
+    {
+        return $this->members();
+    }
+
+    /**
      * Get all invitations for this project.
      */
     public function invitations()

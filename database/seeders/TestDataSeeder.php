@@ -542,7 +542,6 @@ class TestDataSeeder extends Seeder
             [
                 'description' => 'إسمنت عالي الجودة للأعمال الخرسانية',
                 'unit' => 'طن',
-                'unit_cost' => 350.00,
             ]
         );
 
@@ -551,7 +550,6 @@ class TestDataSeeder extends Seeder
             [
                 'description' => 'حديد تسليح قطر 16 مم',
                 'unit' => 'طن',
-                'unit_cost' => 2800.00,
             ]
         );
 
@@ -560,7 +558,6 @@ class TestDataSeeder extends Seeder
             [
                 'description' => 'رمل ناعم للخلط الخرساني',
                 'unit' => 'متر مكعب',
-                'unit_cost' => 85.00,
             ]
         );
 
@@ -569,11 +566,10 @@ class TestDataSeeder extends Seeder
             [
                 'description' => 'كابلات كهربائية معزولة 4 مم',
                 'unit' => 'متر',
-                'unit_cost' => 12.50,
             ]
         );
 
-        // Resource Requests
+        // Resource Requests - إضافة requested_date المطلوب
         ResourceRequest::updateOrCreate(
             ['project_id' => $project1->id, 'resource_name' => 'إسمنت بورتلاندي - دفعة 5'],
             [
@@ -583,6 +579,8 @@ class TestDataSeeder extends Seeder
                 'resource_type' => 'مواد بناء',
                 'quantity' => 500,
                 'unit' => 'طن',
+                'requested_date' => now()->subWeeks(1),
+                'required_date' => now()->addWeeks(2),
                 'required_by' => now()->addWeeks(2),
                 'description' => 'مطلوب لاستكمال صب الطوابق 18-22',
                 'status' => ResourceRequestStatusEnum::APPROVED,
@@ -600,6 +598,8 @@ class TestDataSeeder extends Seeder
                 'resource_type' => 'مواد بناء',
                 'quantity' => 200,
                 'unit' => 'طن',
+                'requested_date' => now(),
+                'required_date' => now()->addDays(10),
                 'required_by' => now()->addDays(10),
                 'description' => 'حديد للأعمدة والبلاطات',
                 'status' => ResourceRequestStatusEnum::PENDING,
@@ -615,6 +615,8 @@ class TestDataSeeder extends Seeder
                 'resource_type' => 'مواد كهربائية',
                 'quantity' => 15000,
                 'unit' => 'متر',
+                'requested_date' => now(),
+                'required_date' => now()->addMonths(2),
                 'required_by' => now()->addMonths(2),
                 'description' => 'كابلات للتمديدات الكهربائية',
                 'status' => ResourceRequestStatusEnum::PENDING,
@@ -624,12 +626,14 @@ class TestDataSeeder extends Seeder
         ResourceRequest::updateOrCreate(
             ['project_id' => $project2->id, 'resource_name' => 'خرسانة جاهزة'],
             [
-                'resource_id' => null,
+                'resource_id' => $resource1->id,
                 'task_id' => $task2_2->id,
                 'requested_by' => $contractor1->id,
                 'resource_type' => 'مواد بناء',
                 'quantity' => 1500,
                 'unit' => 'متر مكعب',
+                'requested_date' => now()->subDays(3),
+                'required_date' => now()->addWeeks(1),
                 'required_by' => now()->addWeeks(1),
                 'description' => 'خرسانة جاهزة لصب السقف الرئيسي',
                 'status' => ResourceRequestStatusEnum::APPROVED,
@@ -641,12 +645,14 @@ class TestDataSeeder extends Seeder
         ResourceRequest::updateOrCreate(
             ['project_id' => $project2->id, 'resource_name' => 'وحدات تكييف مركزي'],
             [
-                'resource_id' => null,
+                'resource_id' => $resource2->id,
                 'task_id' => $task2_3->id,
                 'requested_by' => $contractor1->id,
                 'resource_type' => 'معدات',
                 'quantity' => 50,
                 'unit' => 'وحدة',
+                'requested_date' => now()->subWeeks(2),
+                'required_date' => now()->addMonths(3),
                 'required_by' => now()->addMonths(3),
                 'description' => 'وحدات تكييف سعة 5 طن للمجمع',
                 'status' => ResourceRequestStatusEnum::REJECTED,

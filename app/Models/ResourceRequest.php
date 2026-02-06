@@ -20,6 +20,8 @@ class ResourceRequest extends Model
         'resource_name',
         'quantity',
         'unit',
+        'requested_date',
+        'required_date',
         'required_by',
         'description',
         'document_path',
