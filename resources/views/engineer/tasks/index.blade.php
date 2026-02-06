@@ -7,36 +7,24 @@
 @section('page_title', __('app.tasks'))
 
 @section('sidebar')
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.dashboard') }}">
-            <i class="fas fa-tachometer-alt"></i> {{ __('app.dashboard') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.projects.index') }}">
-            <i class="fas fa-project-diagram"></i> {{ __('app.projects') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="{{ route('engineer.tasks.index') }}">
-            <i class="fas fa-tasks"></i> {{ __('app.tasks') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.reports.index') }}">
-            <i class="fas fa-file-alt"></i> {{ __('app.reports') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.resource-requests.index') }}">
-            <i class="fas fa-tools"></i> {{ __('app.resources') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.files.index') }}">
-            <i class="fas fa-file"></i> {{ __('app.files') }}
-        </a>
-    </li>
+    <a href="{{ route('engineer.dashboard') }}" class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+        <i class="fas fa-tachometer-alt me-2"></i> {{ __('app.dashboard') }}
+    </a>
+    <a href="{{ route('engineer.projects.index') }}" class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+        <i class="fas fa-project-diagram me-2"></i> {{ __('app.projects') }}
+    </a>
+    <a href="{{ route('engineer.tasks.index') }}" class="list-group-item list-group-item-action bg-white text-primary fw-bold border-start border-4 border-primary">
+        <i class="fas fa-tasks me-2"></i> {{ __('app.tasks') }}
+    </a>
+    <a href="{{ route('engineer.reports.index') }}" class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+        <i class="fas fa-file-alt me-2"></i> {{ __('app.reports') }}
+    </a>
+    <a href="{{ route('engineer.resource-requests.index') }}" class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+        <i class="fas fa-tools me-2"></i> {{ __('app.resources') }}
+    </a>
+    <a href="{{ route('engineer.files.index') }}" class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
+        <i class="fas fa-file me-2"></i> {{ __('app.files') }}
+    </a>
 @endsection
 
 @section('content')
