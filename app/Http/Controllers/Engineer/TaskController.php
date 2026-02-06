@@ -20,13 +20,13 @@ class TaskController extends Controller
             ->where('assigned_to', Auth::id())
             ->orderBy('due_date')
             ->get();
-            
+
         // For pagination in the main view
         $paginatedTasks = Task::with(['project', 'createdBy'])
             ->where('assigned_to', Auth::id())
             ->orderBy('due_date')
             ->paginate(10);
-            
+
         return view('engineer.tasks.index', compact('tasks', 'paginatedTasks'));
     }
 
@@ -35,16 +35,17 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        // Check if the engineer is assigned to the task
-        if ($task->assigned_to !== Auth::id()) {
-            return redirect()->route('engineer.tasks.index')
-                ->with('error', 'You do not have permission to view this task.');
-        }
+        $this->authorize('view', $task);
 
-        $task->load(['project', 'createdBy', 'updates' => function($query) {
-            $query->orderBy('created_at', 'desc');
-        }, 'updates.user']);
-        
+        $task->load([
+            'project',
+            'createdBy',
+            'updates' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
+            'updates.user'
+        ]);
+
         return view('engineer.tasks.show', compact('task'));
     }
 
@@ -53,11 +54,7 @@ class TaskController extends Controller
      */
     public function startTask(Task $task)
     {
-        // Check if the engineer is assigned to the task
-        if ($task->assigned_to !== Auth::id()) {
-            return redirect()->route('engineer.tasks.index')
-                ->with('error', 'You do not have permission to start this task.');
-        }
+        $this->authorize('start', $task);
 
         // Check if the task is in a startable state
         if (!in_array($task->status, ['backlog', 'todo'])) {
@@ -87,11 +84,7 @@ class TaskController extends Controller
      */
     public function completeTask(Request $request, Task $task)
     {
-        // Check if the engineer is assigned to the task
-        if ($task->assigned_to !== Auth::id()) {
-            return redirect()->route('engineer.tasks.index')
-                ->with('error', 'You do not have permission to complete this task.');
-        }
+        $this->authorize('complete', $task);
 
         // Check if the task is in a completable state
         if ($task->status !== 'in_progress') {
@@ -126,11 +119,7 @@ class TaskController extends Controller
      */
     public function updateProgress(Request $request, Task $task)
     {
-        // Check if the engineer is assigned to the task
-        if ($task->assigned_to !== Auth::id()) {
-            return redirect()->route('engineer.tasks.index')
-                ->with('error', 'You do not have permission to update this task.');
-        }
+        $this->authorize('updateProgress', $task);
 
         // Check if the task is in progress
         if ($task->status !== 'in_progress') {
