@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\TaskStatusEnum;
+use App\Enums\TaskPriorityEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
@@ -31,6 +33,8 @@ class Task extends Model
         'completed_at' => 'datetime',
         'estimated_hours' => 'decimal:2',
         'actual_hours' => 'decimal:2',
+        'status' => TaskStatusEnum::class,
+        'priority' => TaskPriorityEnum::class,
     ];
 
     public function project()
@@ -42,7 +46,7 @@ class Task extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
-    
+
     public function assignedBy()
     {
         return $this->belongsTo(User::class, 'assigned_by');
@@ -68,8 +72,8 @@ class Task extends Model
         return $this->hasMany(File::class);
     }
     public function comments()
-{
-    return $this->hasMany(Comment::class);
-}
+    {
+        return $this->hasMany(Comment::class);
+    }
 
 }

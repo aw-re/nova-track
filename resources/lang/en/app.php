@@ -9,6 +9,7 @@ return [
     // Sidebar
     'projects' => 'Projects',
     'tasks' => 'Tasks',
+    'task' => 'Task',
     'reports' => 'Reports',
     'resources' => 'Resources',
     'files' => 'Files',

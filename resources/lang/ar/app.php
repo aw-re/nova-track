@@ -9,6 +9,7 @@ return [
     // Sidebar
     'projects' => 'المشاريع',
     'tasks' => 'المهام',
+    'task' => 'المهمة',
     'reports' => 'التقارير',
     'resources' => 'الموارد',
     'files' => 'الملفات',

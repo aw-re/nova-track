@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Enums\TaskStatusEnum;
+use App\Enums\TaskPriorityEnum;
 
 class StoreTaskRequest extends FormRequest
 {
@@ -30,8 +33,8 @@ class StoreTaskRequest extends FormRequest
             'description' => 'nullable|string',
             'project_id' => 'required|exists:projects,id',
             'assigned_to' => 'nullable|exists:users,id',
-            'priority' => 'required|in:low,medium,high,urgent',
-            'status' => 'required|in:backlog,todo,in_progress,review,completed',
+            'priority' => ['required', Rule::enum(TaskPriorityEnum::class)],
+            'status' => ['required', Rule::enum(TaskStatusEnum::class)],
             'start_date' => 'nullable|date',
             'due_date' => 'nullable|date|after_or_equal:start_date',
             'estimated_hours' => 'nullable|numeric|min:0',

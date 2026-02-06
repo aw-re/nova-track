@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Enums\TaskStatusEnum;
 use Illuminate\Auth\Access\Response;
 
 class TaskPolicy
@@ -90,16 +91,16 @@ class TaskPolicy
     // Role-specific actions
     public function start(User $user, Task $task): bool
     {
-        return $user->id === $task->assigned_to && in_array($task->status, ['backlog', 'todo']);
+        return $user->id === $task->assigned_to && in_array($task->status, [TaskStatusEnum::BACKLOG, TaskStatusEnum::TODO]);
     }
 
     public function complete(User $user, Task $task): bool
     {
-        return $user->id === $task->assigned_to && $task->status === 'in_progress';
+        return $user->id === $task->assigned_to && $task->status === TaskStatusEnum::IN_PROGRESS;
     }
 
     public function updateProgress(User $user, Task $task): bool
     {
-        return $user->id === $task->assigned_to && $task->status === 'in_progress';
+        return $user->id === $task->assigned_to && $task->status === TaskStatusEnum::IN_PROGRESS;
     }
 }

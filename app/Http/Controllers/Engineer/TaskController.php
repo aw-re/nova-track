@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\TaskStatusEnum;
 
 class TaskController extends Controller
 {
@@ -57,26 +58,26 @@ class TaskController extends Controller
         $this->authorize('start', $task);
 
         // Check if the task is in a startable state
-        if (!in_array($task->status, ['backlog', 'todo'])) {
+        if (!in_array($task->status, [TaskStatusEnum::BACKLOG, TaskStatusEnum::TODO])) {
             return redirect()->route('engineer.tasks.show', $task)
-                ->with('error', 'This task cannot be started because it is already in progress or completed.');
+                ->with('error', __('messages.error.invalid_status_start'));
         }
 
         $oldStatus = $task->status;
         $task->update([
-            'status' => 'in_progress',
+            'status' => TaskStatusEnum::IN_PROGRESS,
         ]);
 
         // Create task update record
         $task->updates()->create([
             'user_id' => Auth::id(),
             'old_status' => $oldStatus,
-            'new_status' => 'in_progress',
+            'new_status' => TaskStatusEnum::IN_PROGRESS,
             'comment' => 'Task started.',
         ]);
 
         return redirect()->route('engineer.tasks.show', $task)
-            ->with('success', 'Task started successfully.');
+            ->with('success', __('messages.success.started', ['model' => __('app.task')]));
     }
 
     /**
@@ -87,9 +88,9 @@ class TaskController extends Controller
         $this->authorize('complete', $task);
 
         // Check if the task is in a completable state
-        if ($task->status !== 'in_progress') {
+        if ($task->status !== TaskStatusEnum::IN_PROGRESS) {
             return redirect()->route('engineer.tasks.show', $task)
-                ->with('error', 'This task cannot be completed because it is not in progress.');
+                ->with('error', __('messages.error.invalid_status_complete'));
         }
 
         $request->validate([
@@ -98,7 +99,7 @@ class TaskController extends Controller
 
         $oldStatus = $task->status;
         $task->update([
-            'status' => 'completed',
+            'status' => TaskStatusEnum::COMPLETED,
             'completed_at' => now(),
         ]);
 
@@ -106,12 +107,12 @@ class TaskController extends Controller
         $task->updates()->create([
             'user_id' => Auth::id(),
             'old_status' => $oldStatus,
-            'new_status' => 'completed',
+            'new_status' => TaskStatusEnum::COMPLETED,
             'comment' => $request->completion_notes,
         ]);
 
         return redirect()->route('engineer.tasks.show', $task)
-            ->with('success', 'Task completed successfully.');
+            ->with('success', __('messages.success.completed', ['model' => __('app.task')]));
     }
 
     /**
@@ -122,9 +123,9 @@ class TaskController extends Controller
         $this->authorize('updateProgress', $task);
 
         // Check if the task is in progress
-        if ($task->status !== 'in_progress') {
+        if ($task->status !== TaskStatusEnum::IN_PROGRESS) {
             return redirect()->route('engineer.tasks.show', $task)
-                ->with('error', 'You can only update progress for tasks that are in progress.');
+                ->with('error', __('messages.error.invalid_status_progress'));
         }
 
         $request->validate([
@@ -140,6 +141,6 @@ class TaskController extends Controller
         ]);
 
         return redirect()->route('engineer.tasks.show', $task)
-            ->with('success', 'Progress update added successfully.');
+            ->with('success', __('messages.success.progress_updated'));
     }
 }

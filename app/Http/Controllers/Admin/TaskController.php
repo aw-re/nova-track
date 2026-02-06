@@ -7,6 +7,8 @@ use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\ActivityLog;
+use App\Enums\TaskStatusEnum;
+use App\Enums\TaskPriorityEnum;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use Illuminate\Http\Request;
@@ -59,8 +61,8 @@ class TaskController extends Controller
         // Get data for filters
         $projects = Project::all();
         $users = User::all();
-        $statuses = ['backlog', 'todo', 'in_progress', 'review', 'completed'];
-        $priorities = ['low', 'medium', 'high', 'urgent'];
+        $statuses = TaskStatusEnum::cases();
+        $priorities = TaskPriorityEnum::cases();
 
         return view('admin.tasks.index', compact('tasks', 'projects', 'users', 'statuses', 'priorities'));
     }
@@ -87,11 +89,11 @@ class TaskController extends Controller
     {
         Task::create(array_merge($request->validated(), [
             'assigned_by' => Auth::id(),
-            'completed_at' => $request->status === 'completed' ? now() : null,
+            'completed_at' => $request->status === TaskStatusEnum::COMPLETED->value ? now() : null,
         ]));
 
         return redirect()->route('admin.tasks.index')
-            ->with('success', 'Task created successfully.');
+            ->with('success', __('messages.success.created', ['model' => __('app.task')]));
     }
 
     /**
@@ -134,14 +136,14 @@ class TaskController extends Controller
         $task->update($request->validated());
 
         // Update completed_at timestamp if status changed to completed
-        if ($oldStatus !== 'completed' && $newStatus === 'completed') {
+        if ($oldStatus !== TaskStatusEnum::COMPLETED && $newStatus === TaskStatusEnum::COMPLETED->value) {
             $task->update(['completed_at' => now()]);
-        } elseif ($oldStatus === 'completed' && $newStatus !== 'completed') {
+        } elseif ($oldStatus === TaskStatusEnum::COMPLETED && $newStatus !== TaskStatusEnum::COMPLETED->value) {
             $task->update(['completed_at' => null]);
         }
 
         return redirect()->route('admin.tasks.index')
-            ->with('success', 'Task updated successfully.');
+            ->with('success', __('messages.success.updated', ['model' => __('app.task')]));
     }
 
     /**
@@ -155,6 +157,6 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect()->route('admin.tasks.index')
-            ->with('success', 'Task deleted successfully.');
+            ->with('success', __('messages.success.deleted', ['model' => __('app.task')]));
     }
 }
