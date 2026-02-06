@@ -386,7 +386,7 @@
             <div class="row g-4">
                 <div class="col-lg-4">
                     <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-cube text-primary fs-3"></i>
+                        <img src="{{ asset('images/logo.png') }}" alt="{{ __('app.app_name') }}" height="50">
                         <span class="fs-4 fw-bold">{{ __('app.app_name') }}</span>
                     </div>
                     <p class="text-white-50">Professional construction project management software designed for modern

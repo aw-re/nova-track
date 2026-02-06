@@ -12,8 +12,10 @@
 
 ### 🎨 Modern UI/UX
 - **Glassmorphism Design**: A premium, frosted-glass aesthetic using modern CSS variables.
+- **Unified Navigation**: Context-aware sidebar that adapts seamlessly to specific user roles (Admin, Engineer, etc.).
+- **Professional Landing Page**: Engaging hero section with a modern team presentation and consistent branding.
 - **Responsive Layout**: Fully responsive dashboard supporting mobile and desktop.
-- **Blade Components**: Reusable UI components for consistent design (Stats Cards, App Cards).
+- **Blade Components**: Reusable UI components for consistent design (Stats Cards, App Cards, Sidebar).
 
 ### 🌍 Localization (En/Ar)
 - **Bilingual Support**: Full support for English and Arabic.
