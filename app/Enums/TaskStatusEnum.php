@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum TaskStatusEnum: string
+use App\Contracts\HasColorAndLabel;
+
+enum TaskStatusEnum: string implements HasColorAndLabel
 {
     case BACKLOG = 'backlog';
     case TODO = 'todo';

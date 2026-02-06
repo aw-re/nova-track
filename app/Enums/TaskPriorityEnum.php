@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-enum TaskPriorityEnum: string
+use App\Contracts\HasColorAndLabel;
+
+enum TaskPriorityEnum: string implements HasColorAndLabel
 {
     case LOW = 'low';
     case MEDIUM = 'medium';
