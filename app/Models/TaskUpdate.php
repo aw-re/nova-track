@@ -12,6 +12,9 @@ class TaskUpdate extends Model
     protected $fillable = [
         'task_id',
         'user_id',
+        'old_status',
+        'new_status',
+        'comment',
         'description',
         'progress_percentage',
         'hours_spent',
@@ -37,3 +40,4 @@ class TaskUpdate extends Model
         return $this->hasMany(TaskImage::class);
     }
 }
+

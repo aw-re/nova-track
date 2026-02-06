@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\ReportStatusEnum;
+use App\Enums\ReportTypeEnum;
 
 class Report extends Model
 {
@@ -19,11 +21,14 @@ class Report extends Model
         'submitted_at',
         'approved_by',
         'approved_at',
+        'rejection_reason',
     ];
 
     protected $casts = [
         'submitted_at' => 'datetime',
         'approved_at' => 'datetime',
+        'status' => ReportStatusEnum::class,
+        'type' => ReportTypeEnum::class,
     ];
 
     public function project()
@@ -40,9 +45,5 @@ class Report extends Model
     {
         return $this->belongsTo(User::class, 'approved_by');
     }
-    public function submittedBy()
-{
-    return $this->belongsTo(User::class, 'submitted_by');
 }
 
-}

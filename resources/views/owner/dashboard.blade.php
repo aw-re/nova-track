@@ -51,8 +51,11 @@
                                 <tr>
                                     <td class="fw-bold text-dark">{{ $project->name }}</td>
                                     <td>
-                                        <span
-                                            class="badge bg-primary bg-opacity-10 text-primary">{{ ucfirst($project->status) }}</span>
+                                        @if($project->status instanceof \App\Enums\ProjectStatusEnum)
+                                            <span class="badge bg-{{ $project->status->color() }} bg-opacity-10 text-{{ $project->status->color() }}">{{ $project->status->label() }}</span>
+                                        @else
+                                            <span class="badge bg-primary bg-opacity-10 text-primary">{{ __('app.status_' . $project->status) }}</span>
+                                        @endif
                                     </td>
                                     <td style="width: 30%">
                                         @php
@@ -86,10 +89,10 @@
 
         <!-- Recent Tasks -->
         <div class="col-lg-6">
-            <x-app-card title="Recent Tasks" icon="fas fa-tasks">
+            <x-app-card title="{{ __('app.recent_tasks') }}" icon="fas fa-tasks">
                 <x-slot name="actions">
                     <a href="{{ route('owner.tasks.index') }}" class="btn btn-sm btn-light text-primary">
-                        <i class="fas fa-arrow-right"></i> View All
+                        <i class="fas fa-arrow-right"></i> {{ __('app.view_all') }}
                     </a>
                 </x-slot>
 
@@ -104,14 +107,14 @@
                                 </div>
                                 <div>
                                     <h6 class="mb-0 fw-bold">{{ $task->title }}</h6>
-                                    <small class="text-muted">{{ $task->project->name }} • Due
-                                        {{ $task->due_date ? date('M d', strtotime($task->due_date)) : 'N/A' }}</small>
+                                    <small class="text-muted">{{ $task->project->name }} • {{ __('app.due') }}
+                                        {{ $task->due_date ? $task->due_date->format('M d') : 'N/A' }}</small>
                                 </div>
                             </div>
                             <x-badge :status="$task->status" />
                         </div>
                     @empty
-                        <div class="text-center text-muted py-4">No tasks found.</div>
+                        <div class="text-center text-muted py-4">{{ __('app.no_tasks_found') }}</div>
                     @endforelse
                 </div>
             </x-app-card>

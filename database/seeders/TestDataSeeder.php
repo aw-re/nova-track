@@ -3,18 +3,22 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Role;
-use App\Models\User;
-use App\Models\Project;
-use App\Models\ProjectMember;
-use App\Models\Task;
-use App\Models\Resource;
-use App\Models\ResourceRequest;
-use App\Models\File;
-use App\Models\Report;
-use App\Models\Notification;
-use App\Models\Rating;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Models\Role;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\Report;
+use App\Models\ResourceRequest;
+use App\Models\Resource;
+use App\Models\ProjectMember;
+use App\Models\TaskUpdate;
+use App\Enums\ProjectStatusEnum;
+use App\Enums\TaskStatusEnum;
+use App\Enums\TaskPriorityEnum;
+use App\Enums\ReportStatusEnum;
+use App\Enums\ReportTypeEnum;
+use App\Enums\ResourceRequestStatusEnum;
 
 class TestDataSeeder extends Seeder
 {
@@ -23,642 +27,718 @@ class TestDataSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create roles
-        $adminRole = Role::create(['name' => 'admin', 'display_name' => 'Administrator']);
-        $ownerRole = Role::create(['name' => 'project_owner', 'display_name' => 'Project Owner']);
-        $engineerRole = Role::create(['name' => 'engineer', 'display_name' => 'Engineer']);
-        $contractorRole = Role::create(['name' => 'contractor', 'display_name' => 'Contractor']);
+        $this->command->info('🚀 Starting comprehensive test data seeding...');
 
-        // Create users
-        $admin = User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '1234567890',
-            'address' => '123 Admin St, City',
-            'company' => 'CPMS Admin',
-        ]);
-        $admin->roles()->attach($adminRole->id);
+        // Get roles
+        $adminRole = Role::where('name', 'admin')->first();
+        $ownerRole = Role::where('name', 'project_owner')->first();
+        $engineerRole = Role::where('name', 'engineer')->first();
+        $contractorRole = Role::where('name', 'contractor')->first();
 
-        $owner = User::create([
-            'name' => 'Project Owner',
-            'email' => 'owner@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '2345678901',
-            'address' => '456 Owner Ave, City',
-            'company' => 'Construction Co.',
-        ]);
-        $owner->roles()->attach($ownerRole->id);
+        // =============================================
+        // 👤 USERS
+        // =============================================
+        $this->command->info('Creating users...');
 
-        $engineer1 = User::create([
-            'name' => 'Engineer One',
-            'email' => 'engineer1@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '3456789012',
-            'address' => '789 Engineer Blvd, City',
-            'company' => 'Engineering Solutions',
-        ]);
-        $engineer1->roles()->attach($engineerRole->id);
-
-        $engineer2 = User::create([
-            'name' => 'Engineer Two',
-            'email' => 'engineer2@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '4567890123',
-            'address' => '101 Engineer Lane, City',
-            'company' => 'Tech Engineers Inc.',
-        ]);
-        $engineer2->roles()->attach($engineerRole->id);
-
-        $contractor1 = User::create([
-            'name' => 'Contractor One',
-            'email' => 'contractor1@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '5678901234',
-            'address' => '202 Contractor St, City',
-            'company' => 'Build It Right',
-        ]);
-        $contractor1->roles()->attach($contractorRole->id);
-
-        $contractor2 = User::create([
-            'name' => 'Contractor Two',
-            'email' => 'contractor2@example.com',
-            'password' => Hash::make('password'),
-            'phone' => '6789012345',
-            'address' => '303 Contractor Ave, City',
-            'company' => 'Quality Contractors',
-        ]);
-        $contractor2->roles()->attach($contractorRole->id);
-
-        // Create resources
-        $resources = [
-            ['name' => 'Cement', 'description' => 'Portland cement', 'category' => 'Building Materials', 'unit' => 'Bags'],
-            ['name' => 'Steel Rebar', 'description' => 'Reinforcement steel bars', 'category' => 'Building Materials', 'unit' => 'Tons'],
-            ['name' => 'Bricks', 'description' => 'Standard clay bricks', 'category' => 'Building Materials', 'unit' => 'Pieces'],
-            ['name' => 'Sand', 'description' => 'Fine sand for concrete mixing', 'category' => 'Building Materials', 'unit' => 'Cubic Meters'],
-            ['name' => 'Excavator', 'description' => 'Heavy machinery for digging', 'category' => 'Equipment', 'unit' => 'Hours'],
-            ['name' => 'Crane', 'description' => 'Tower crane for lifting materials', 'category' => 'Equipment', 'unit' => 'Days'],
-            ['name' => 'Lumber', 'description' => 'Construction grade lumber', 'category' => 'Building Materials', 'unit' => 'Board Feet'],
-            ['name' => 'Paint', 'description' => 'Interior/exterior paint', 'category' => 'Finishing Materials', 'unit' => 'Gallons'],
-        ];
-
-        $resourceMap = [];
-        foreach ($resources as $index => $resourceData) {
-            $resource = Resource::create($resourceData);
-            $resourceMap[$index + 1] = $resource->id;
-        }
-
-        // Create Project 1
-        $project1 = Project::create([
-            'name' => 'Commercial Office Building',
-            'description' => 'Construction of a 10-story commercial office building in downtown area',
-            'location' => 'Downtown Business District',
-            'start_date' => now()->subMonths(2),
-            'end_date' => now()->addMonths(10),
-            'budget' => 5000000.00,
-            'status' => 'in_progress',
-            'owner_id' => $owner->id,
-        ]);
-
-        // Add project members
-        ProjectMember::create([
-            'project_id' => $project1->id,
-            'user_id' => $owner->id,
-            'role_id' => $ownerRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(2),
-        ]);
-
-        ProjectMember::create([
-            'project_id' => $project1->id,
-            'user_id' => $engineer1->id,
-            'role_id' => $engineerRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(2),
-        ]);
-
-        ProjectMember::create([
-            'project_id' => $project1->id,
-            'user_id' => $contractor1->id,
-            'role_id' => $contractorRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(2),
-        ]);
-
-        // Create tasks for Project 1
-        $tasks1 = [
+        // Admin User
+        $admin = User::updateOrCreate(
+            ['email' => 'admin@novatrack.com'],
             [
-                'title' => 'Site Preparation',
-                'description' => 'Clear the site and prepare for foundation work',
-                'project_id' => $project1->id,
-                'assigned_by' => $engineer1->id,
-                'assigned_to' => $contractor1->id,
-                'priority' => 'high',
-                'status' => 'completed',
-                'start_date' => now()->subMonths(2),
-                'due_date' => now()->subMonths(1)->subDays(15),
-                'estimated_hours' => 120,
-                'actual_hours' => 110,
-                'completed_at' => now()->subMonths(1)->subDays(17),
-            ],
-            [
-                'title' => 'Foundation Construction',
-                'description' => 'Excavate and construct the building foundation',
-                'project_id' => $project1->id,
-                'assigned_by' => $engineer1->id,
-                'assigned_to' => $contractor1->id,
-                'priority' => 'high',
-                'status' => 'completed',
-                'start_date' => now()->subMonths(1)->subDays(14),
-                'due_date' => now()->subDays(15),
-                'estimated_hours' => 240,
-                'actual_hours' => 260,
-                'completed_at' => now()->subDays(12),
-            ],
-            [
-                'title' => 'Structural Framework',
-                'description' => 'Construct the main structural framework of the building',
-                'project_id' => $project1->id,
-                'assigned_by' => $engineer1->id,
-                'assigned_to' => $contractor1->id,
-                'priority' => 'high',
-                'status' => 'in_progress',
-                'start_date' => now()->subDays(10),
-                'due_date' => now()->addMonths(1),
-                'estimated_hours' => 500,
-                'actual_hours' => 120,
-            ],
-            [
-                'title' => 'Electrical Wiring Planning',
-                'description' => 'Create detailed plans for the electrical wiring system',
-                'project_id' => $project1->id,
-                'assigned_by' => $engineer1->id,
-                'assigned_to' => null,
-                'priority' => 'medium',
-                'status' => 'todo',
-                'start_date' => now()->addDays(5),
-                'due_date' => now()->addDays(20),
-                'estimated_hours' => 80,
-            ],
-        ];
+                'name' => 'مدير النظام',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'admin',
+            ]
+        );
+        $admin->roles()->sync([$adminRole->id]);
 
-        $taskMap = [];
-        foreach ($tasks1 as $index => $taskData) {
-            $task = Task::create($taskData);
-            $taskMap["project1_" . ($index + 1)] = $task->id;
-        }
-
-        // Create resource requests for Project 1
-        $resourceRequests1 = [
+        // Project Owners
+        $owner1 = User::updateOrCreate(
+            ['email' => 'owner1@novatrack.com'],
             [
-                'project_id' => $project1->id,
-                'task_id' => $taskMap["project1_1"], // Site Preparation
-                'resource_id' => $resourceMap[5], // Excavator
-                'requested_by' => $contractor1->id,
-                'quantity' => 40,
-                'status' => 'delivered',
-                'requested_date' => now()->subMonths(2),
-                'required_date' => now()->subMonths(2)->addDays(5),
-                'notes' => 'Need excavator for site clearing',
-                'approved_by' => $owner->id,
-                'approved_at' => now()->subMonths(2)->addDays(1),
-                'delivered_at' => now()->subMonths(2)->addDays(3),
-            ],
+                'name' => 'أحمد المالكي',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'project_owner',
+            ]
+        );
+        $owner1->roles()->sync([$ownerRole->id]);
+
+        $owner2 = User::updateOrCreate(
+            ['email' => 'owner2@novatrack.com'],
             [
-                'project_id' => $project1->id,
-                'task_id' => $taskMap["project1_2"], // Foundation Construction
-                'resource_id' => $resourceMap[1], // Cement
-                'requested_by' => $contractor1->id,
-                'quantity' => 500,
-                'status' => 'delivered',
-                'requested_date' => now()->subMonths(1)->subDays(20),
-                'required_date' => now()->subMonths(1)->subDays(10),
-                'notes' => 'For foundation construction',
-                'approved_by' => $owner->id,
-                'approved_at' => now()->subMonths(1)->subDays(19),
-                'delivered_at' => now()->subMonths(1)->subDays(12),
-            ],
+                'name' => 'سارة الخالدي',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'project_owner',
+            ]
+        );
+        $owner2->roles()->sync([$ownerRole->id]);
+
+        // Engineers
+        $engineer1 = User::updateOrCreate(
+            ['email' => 'engineer1@novatrack.com'],
             [
-                'project_id' => $project1->id,
-                'task_id' => $taskMap["project1_2"], // Foundation Construction
-                'resource_id' => $resourceMap[2], // Steel Rebar
-                'requested_by' => $contractor1->id,
-                'quantity' => 15,
-                'status' => 'delivered',
-                'requested_date' => now()->subMonths(1)->subDays(20),
-                'required_date' => now()->subMonths(1)->subDays(10),
-                'notes' => 'For foundation reinforcement',
-                'approved_by' => $owner->id,
-                'approved_at' => now()->subMonths(1)->subDays(19),
-                'delivered_at' => now()->subMonths(1)->subDays(12),
-            ],
+                'name' => 'محمد السعيد',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'engineer',
+            ]
+        );
+        $engineer1->roles()->sync([$engineerRole->id]);
+
+        $engineer2 = User::updateOrCreate(
+            ['email' => 'engineer2@novatrack.com'],
             [
-                'project_id' => $project1->id,
-                'task_id' => $taskMap["project1_3"], // Structural Framework
-                'resource_id' => $resourceMap[6], // Crane
-                'requested_by' => $contractor1->id,
-                'quantity' => 30,
-                'status' => 'approved',
-                'requested_date' => now()->subDays(15),
-                'required_date' => now()->subDays(5),
-                'notes' => 'Need crane for structural framework',
-                'approved_by' => $owner->id,
-                'approved_at' => now()->subDays(14),
-            ],
+                'name' => 'فاطمة العلي',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'engineer',
+            ]
+        );
+        $engineer2->roles()->sync([$engineerRole->id]);
+
+        $engineer3 = User::updateOrCreate(
+            ['email' => 'engineer3@novatrack.com'],
             [
-                'project_id' => $project1->id,
-                'task_id' => $taskMap["project1_3"], // Structural Framework
-                'resource_id' => $resourceMap[2], // Steel Rebar
-                'requested_by' => $contractor1->id,
-                'quantity' => 25,
-                'status' => 'pending',
-                'requested_date' => now()->subDays(3),
-                'required_date' => now()->addDays(5),
-                'notes' => 'Additional steel for upper floors',
-            ],
-        ];
+                'name' => 'خالد الحربي',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'engineer',
+            ]
+        );
+        $engineer3->roles()->sync([$engineerRole->id]);
 
-        foreach ($resourceRequests1 as $request) {
-            ResourceRequest::create($request);
-        }
-
-        // Create Project 2
-        $project2 = Project::create([
-            'name' => 'Residential Apartment Complex',
-            'description' => 'Construction of a 5-building residential apartment complex with 120 units',
-            'location' => 'Suburban Area, North District',
-            'start_date' => now()->subMonths(1),
-            'end_date' => now()->addYears(1),
-            'budget' => 12000000.00,
-            'status' => 'in_progress',
-            'owner_id' => $owner->id,
-        ]);
-
-        // Add project members
-        ProjectMember::create([
-            'project_id' => $project2->id,
-            'user_id' => $owner->id,
-            'role_id' => $ownerRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(1),
-        ]);
-
-        ProjectMember::create([
-            'project_id' => $project2->id,
-            'user_id' => $engineer2->id,
-            'role_id' => $engineerRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(1),
-        ]);
-
-        ProjectMember::create([
-            'project_id' => $project2->id,
-            'user_id' => $contractor2->id,
-            'role_id' => $contractorRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(1),
-        ]);
-
-        // Create tasks for Project 2
-        $tasks2 = [
+        // Contractors
+        $contractor1 = User::updateOrCreate(
+            ['email' => 'contractor1@novatrack.com'],
             [
-                'title' => 'Site Survey and Analysis',
-                'description' => 'Complete topographical survey and soil analysis',
-                'project_id' => $project2->id,
-                'assigned_by' => $engineer2->id,
-                'assigned_to' => $contractor2->id,
-                'priority' => 'high',
-                'status' => 'completed',
+                'name' => 'عبدالله القحطاني',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'contractor',
+            ]
+        );
+        $contractor1->roles()->sync([$contractorRole->id]);
+
+        $contractor2 = User::updateOrCreate(
+            ['email' => 'contractor2@novatrack.com'],
+            [
+                'name' => 'يوسف الشمري',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'contractor',
+            ]
+        );
+        $contractor2->roles()->sync([$contractorRole->id]);
+
+        $contractor3 = User::updateOrCreate(
+            ['email' => 'contractor3@novatrack.com'],
+            [
+                'name' => 'نورة الدوسري',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+                'role' => 'contractor',
+            ]
+        );
+        $contractor3->roles()->sync([$contractorRole->id]);
+
+        $this->command->info('✅ Created 9 users');
+
+        // =============================================
+        // 🏗️ PROJECTS
+        // =============================================
+        $this->command->info('Creating projects...');
+
+        $project1 = Project::updateOrCreate(
+            ['name' => 'برج الرياض السكني'],
+            [
+                'description' => 'مشروع برج سكني فاخر مكون من 30 طابق في قلب مدينة الرياض. يتضمن المشروع 200 وحدة سكنية مع مرافق ترفيهية ومواقف سيارات.',
+                'location' => 'الرياض - حي العليا',
+                'start_date' => now()->subMonths(3),
+                'end_date' => now()->addMonths(18),
+                'budget' => 150000000.00,
+                'status' => ProjectStatusEnum::IN_PROGRESS,
+                'owner_id' => $owner1->id,
+            ]
+        );
+
+        $project2 = Project::updateOrCreate(
+            ['name' => 'مجمع جدة التجاري'],
+            [
+                'description' => 'مجمع تجاري متكامل يضم مول تسوق ومكاتب إدارية وفنادق. المشروع يشمل 5 مباني متصلة بجسور.',
+                'location' => 'جدة - كورنيش البحر الأحمر',
+                'start_date' => now()->subMonths(6),
+                'end_date' => now()->addMonths(24),
+                'budget' => 280000000.00,
+                'status' => ProjectStatusEnum::IN_PROGRESS,
+                'owner_id' => $owner1->id,
+            ]
+        );
+
+        $project3 = Project::updateOrCreate(
+            ['name' => 'مستشفى الدمام التخصصي'],
+            [
+                'description' => 'مستشفى تخصصي سعة 500 سرير مجهز بأحدث التقنيات الطبية. يشمل أقسام طوارئ وعمليات ورعاية مركزة.',
+                'location' => 'الدمام - المنطقة الشرقية',
                 'start_date' => now()->subMonths(1),
-                'due_date' => now()->subDays(20),
-                'estimated_hours' => 60,
-                'actual_hours' => 55,
-                'completed_at' => now()->subDays(22),
-            ],
+                'end_date' => now()->addMonths(30),
+                'budget' => 450000000.00,
+                'status' => ProjectStatusEnum::PLANNING,
+                'owner_id' => $owner2->id,
+            ]
+        );
+
+        $project4 = Project::updateOrCreate(
+            ['name' => 'منتجع الخبر السياحي'],
             [
-                'title' => 'Architectural Design Finalization',
-                'description' => 'Finalize all architectural designs and get approvals',
-                'project_id' => $project2->id,
+                'description' => 'منتجع سياحي فاخر على شاطئ الخليج العربي. يتضمن 150 غرفة فندقية وفلل خاصة ومرافق ترفيهية.',
+                'location' => 'الخبر - الواجهة البحرية',
+                'start_date' => now()->subMonths(12),
+                'end_date' => now()->subMonths(1),
+                'budget' => 95000000.00,
+                'status' => ProjectStatusEnum::COMPLETED,
+                'owner_id' => $owner2->id,
+            ]
+        );
+
+        $project5 = Project::updateOrCreate(
+            ['name' => 'جامعة المستقبل'],
+            [
+                'description' => 'حرم جامعي متكامل يضم 10 كليات ومرافق بحثية ومكتبة مركزية وسكن طلابي.',
+                'location' => 'الرياض - طريق الملك سلمان',
+                'start_date' => now(),
+                'end_date' => now()->addMonths(36),
+                'budget' => 680000000.00,
+                'status' => ProjectStatusEnum::PLANNING,
+                'owner_id' => $owner1->id,
+            ]
+        );
+
+        $this->command->info('✅ Created 5 projects');
+
+        // =============================================
+        // 👥 PROJECT MEMBERS
+        // =============================================
+        $this->command->info('Assigning project members...');
+
+        // Project 1 members
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project1->id, 'user_id' => $engineer1->id],
+            ['role_id' => $engineerRole->id]
+        );
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project1->id, 'user_id' => $contractor1->id],
+            ['role_id' => $contractorRole->id]
+        );
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project1->id, 'user_id' => $contractor2->id],
+            ['role_id' => $contractorRole->id]
+        );
+
+        // Project 2 members
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project2->id, 'user_id' => $engineer2->id],
+            ['role_id' => $engineerRole->id]
+        );
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project2->id, 'user_id' => $engineer3->id],
+            ['role_id' => $engineerRole->id]
+        );
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project2->id, 'user_id' => $contractor1->id],
+            ['role_id' => $contractorRole->id]
+        );
+
+        // Project 3 members
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project3->id, 'user_id' => $engineer1->id],
+            ['role_id' => $engineerRole->id]
+        );
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project3->id, 'user_id' => $contractor3->id],
+            ['role_id' => $contractorRole->id]
+        );
+
+        // Project 4 members
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project4->id, 'user_id' => $engineer2->id],
+            ['role_id' => $engineerRole->id]
+        );
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project4->id, 'user_id' => $contractor2->id],
+            ['role_id' => $contractorRole->id]
+        );
+
+        // Project 5 members
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project5->id, 'user_id' => $engineer3->id],
+            ['role_id' => $engineerRole->id]
+        );
+        ProjectMember::updateOrCreate(
+            ['project_id' => $project5->id, 'user_id' => $contractor1->id],
+            ['role_id' => $contractorRole->id]
+        );
+
+        $this->command->info('✅ Assigned 12 project members');
+
+        // =============================================
+        // 📋 TASKS
+        // =============================================
+        $this->command->info('Creating tasks...');
+
+        // Project 1 Tasks
+        $task1_1 = Task::updateOrCreate(
+            ['project_id' => $project1->id, 'title' => 'تنفيذ أعمال الأساسات'],
+            [
+                'description' => 'تنفيذ أعمال الحفر وصب الأساسات الخرسانية للبرج السكني',
+                'status' => TaskStatusEnum::COMPLETED,
+                'priority' => TaskPriorityEnum::HIGH,
+                'assigned_to' => $contractor1->id,
+                'assigned_by' => $engineer1->id,
+                'due_date' => now()->subMonths(2),
+            ]
+        );
+
+        $task1_2 = Task::updateOrCreate(
+            ['project_id' => $project1->id, 'title' => 'بناء الهيكل الخرساني'],
+            [
+                'description' => 'صب الأعمدة والبلاطات الخرسانية للطوابق الـ 30',
+                'status' => TaskStatusEnum::IN_PROGRESS,
+                'priority' => TaskPriorityEnum::HIGH,
+                'assigned_to' => $contractor1->id,
+                'assigned_by' => $engineer1->id,
+                'due_date' => now()->addMonths(6),
+            ]
+        );
+
+        $task1_3 = Task::updateOrCreate(
+            ['project_id' => $project1->id, 'title' => 'تمديدات الكهرباء'],
+            [
+                'description' => 'تنفيذ جميع التمديدات الكهربائية للوحدات السكنية',
+                'status' => TaskStatusEnum::TODO,
+                'priority' => TaskPriorityEnum::MEDIUM,
+                'assigned_to' => $contractor2->id,
+                'assigned_by' => $engineer1->id,
+                'due_date' => now()->addMonths(8),
+            ]
+        );
+
+        $task1_4 = Task::updateOrCreate(
+            ['project_id' => $project1->id, 'title' => 'أعمال السباكة'],
+            [
+                'description' => 'تمديد شبكات المياه والصرف الصحي لكامل المبنى',
+                'status' => TaskStatusEnum::BACKLOG,
+                'priority' => TaskPriorityEnum::MEDIUM,
+                'assigned_to' => $contractor2->id,
+                'assigned_by' => $engineer1->id,
+                'due_date' => now()->addMonths(10),
+            ]
+        );
+
+        // Project 2 Tasks
+        $task2_1 = Task::updateOrCreate(
+            ['project_id' => $project2->id, 'title' => 'تصميم واجهات المباني'],
+            [
+                'description' => 'إعداد التصاميم المعمارية والهندسية لواجهات المجمع التجاري',
+                'status' => TaskStatusEnum::COMPLETED,
+                'priority' => TaskPriorityEnum::HIGH,
+                'assigned_to' => $engineer2->id,
+                'assigned_by' => $admin->id,
+                'due_date' => now()->subMonths(4),
+            ]
+        );
+
+        $task2_2 = Task::updateOrCreate(
+            ['project_id' => $project2->id, 'title' => 'بناء المبنى الرئيسي'],
+            [
+                'description' => 'تنفيذ أعمال البناء للمول التجاري الرئيسي',
+                'status' => TaskStatusEnum::IN_PROGRESS,
+                'priority' => TaskPriorityEnum::URGENT,
+                'assigned_to' => $contractor1->id,
                 'assigned_by' => $engineer2->id,
+                'due_date' => now()->addMonths(12),
+            ]
+        );
+
+        $task2_3 = Task::updateOrCreate(
+            ['project_id' => $project2->id, 'title' => 'أنظمة التكييف المركزي'],
+            [
+                'description' => 'تركيب نظام التكييف المركزي لكامل المجمع',
+                'status' => TaskStatusEnum::TODO,
+                'priority' => TaskPriorityEnum::HIGH,
+                'assigned_to' => $contractor1->id,
+                'assigned_by' => $engineer3->id,
+                'due_date' => now()->addMonths(14),
+            ]
+        );
+
+        // Project 3 Tasks
+        $task3_1 = Task::updateOrCreate(
+            ['project_id' => $project3->id, 'title' => 'دراسة الجدوى الفنية'],
+            [
+                'description' => 'إعداد دراسة الجدوى الفنية والاقتصادية للمستشفى',
+                'status' => TaskStatusEnum::IN_PROGRESS,
+                'priority' => TaskPriorityEnum::HIGH,
+                'assigned_to' => $engineer1->id,
+                'assigned_by' => $admin->id,
+                'due_date' => now()->addWeeks(3),
+            ]
+        );
+
+        $task3_2 = Task::updateOrCreate(
+            ['project_id' => $project3->id, 'title' => 'اختيار المقاولين'],
+            [
+                'description' => 'فتح المناقصات واختيار المقاولين للمشروع',
+                'status' => TaskStatusEnum::BACKLOG,
+                'priority' => TaskPriorityEnum::MEDIUM,
                 'assigned_to' => null,
-                'priority' => 'high',
-                'status' => 'in_progress',
-                'start_date' => now()->subDays(15),
-                'due_date' => now()->addDays(15),
-                'estimated_hours' => 120,
-                'actual_hours' => 80,
-            ],
+                'assigned_by' => $admin->id,
+                'due_date' => now()->addMonths(2),
+            ]
+        );
+
+        // Project 4 Tasks (Completed Project)
+        $task4_1 = Task::updateOrCreate(
+            ['project_id' => $project4->id, 'title' => 'التشطيبات النهائية'],
             [
-                'title' => 'Permit Acquisition',
-                'description' => 'Obtain all necessary construction permits from local authorities',
-                'project_id' => $project2->id,
-                'assigned_by' => $engineer2->id,
+                'description' => 'إنهاء جميع أعمال التشطيبات للفلل والغرف الفندقية',
+                'status' => TaskStatusEnum::COMPLETED,
+                'priority' => TaskPriorityEnum::HIGH,
                 'assigned_to' => $contractor2->id,
-                'priority' => 'high',
-                'status' => 'in_progress',
-                'start_date' => now()->subDays(10),
-                'due_date' => now()->addDays(20),
-                'estimated_hours' => 40,
-                'actual_hours' => 15,
-            ],
-            [
-                'title' => 'Site Preparation',
-                'description' => 'Clear the site and prepare for foundation work',
-                'project_id' => $project2->id,
                 'assigned_by' => $engineer2->id,
+                'due_date' => now()->subMonths(2),
+            ]
+        );
+
+        $task4_2 = Task::updateOrCreate(
+            ['project_id' => $project4->id, 'title' => 'تجهيز المرافق الترفيهية'],
+            [
+                'description' => 'تركيب وتشغيل جميع المرافق الترفيهية (مسبح، ملاعب، سبا)',
+                'status' => TaskStatusEnum::COMPLETED,
+                'priority' => TaskPriorityEnum::MEDIUM,
                 'assigned_to' => $contractor2->id,
-                'priority' => 'medium',
-                'status' => 'todo',
-                'start_date' => now()->addDays(25),
-                'due_date' => now()->addDays(45),
-                'estimated_hours' => 200,
-            ],
-        ];
+                'assigned_by' => $engineer2->id,
+                'due_date' => now()->subMonths(1),
+            ]
+        );
 
-        foreach ($tasks2 as $index => $taskData) {
-            $task = Task::create($taskData);
-            $taskMap["project2_" . ($index + 1)] = $task->id;
-        }
+        // Project 5 Tasks
+        $task5_1 = Task::updateOrCreate(
+            ['project_id' => $project5->id, 'title' => 'التصميم المعماري'],
+            [
+                'description' => 'إعداد التصاميم المعمارية الأولية للحرم الجامعي',
+                'status' => TaskStatusEnum::IN_PROGRESS,
+                'priority' => TaskPriorityEnum::URGENT,
+                'assigned_to' => $engineer3->id,
+                'assigned_by' => $admin->id,
+                'due_date' => now()->addMonths(2),
+            ]
+        );
 
-        // Create resource requests for Project 2
-        $resourceRequests2 = [
-            [
-                'project_id' => $project2->id,
-                'task_id' => $taskMap["project2_1"], // Site Survey and Analysis
-                'resource_id' => $resourceMap[5], // Excavator
-                'requested_by' => $contractor2->id,
-                'quantity' => 10,
-                'status' => 'delivered',
-                'requested_date' => now()->subMonths(1),
-                'required_date' => now()->subMonths(1)->addDays(5),
-                'notes' => 'Need excavator for site survey',
-                'approved_by' => $owner->id,
-                'approved_at' => now()->subMonths(1)->addDays(1),
-                'delivered_at' => now()->subMonths(1)->addDays(3),
-            ],
-            [
-                'project_id' => $project2->id,
-                'task_id' => $taskMap["project2_4"], // Site Preparation
-                'resource_id' => $resourceMap[5], // Excavator
-                'requested_by' => $contractor2->id,
-                'quantity' => 80,
-                'status' => 'approved',
-                'requested_date' => now()->subDays(5),
-                'required_date' => now()->addDays(20),
-                'notes' => 'Need excavator for full site preparation',
-                'approved_by' => $owner->id,
-                'approved_at' => now()->subDays(3),
-            ],
-        ];
+        $this->command->info('✅ Created 13 tasks');
 
-        foreach ($resourceRequests2 as $request) {
-            ResourceRequest::create($request);
-        }
+        // =============================================
+        // 📄 REPORTS
+        // =============================================
+        $this->command->info('Creating reports...');
 
-        // Create files for both projects
-        $files = [
+        // Project 1 Reports
+        Report::updateOrCreate(
+            ['project_id' => $project1->id, 'title' => 'تقرير التقدم الأسبوعي - الأسبوع 12'],
             [
-                'project_id' => $project1->id,
-                'task_id' => null,
-                'uploaded_by' => $owner->id,
-                'file_name' => 'project1_blueprint.pdf',
-                'file_path' => 'project-files/1/project1_blueprint.pdf',
-                'file_type' => 'application/pdf',
-                'file_size' => 2500000,
-                'description' => 'Main blueprint for the commercial office building',
-                'version' => '1.0',
-            ],
-            [
-                'project_id' => $project1->id,
-                'task_id' => $taskMap["project1_2"], // Foundation Construction
-                'uploaded_by' => $engineer1->id,
-                'file_name' => 'foundation_design.pdf',
-                'file_path' => 'project-files/1/foundation_design.pdf',
-                'file_type' => 'application/pdf',
-                'file_size' => 1800000,
-                'description' => 'Detailed foundation design specifications',
-                'version' => '2.1',
-            ],
-            [
-                'project_id' => $project1->id,
-                'task_id' => $taskMap["project1_3"], // Structural Framework
-                'uploaded_by' => $engineer1->id,
-                'file_name' => 'structural_specs.pdf',
-                'file_path' => 'project-files/1/structural_specs.pdf',
-                'file_type' => 'application/pdf',
-                'file_size' => 3200000,
-                'description' => 'Structural framework specifications',
-                'version' => '1.0',
-            ],
-            [
-                'project_id' => $project2->id,
-                'task_id' => null,
-                'uploaded_by' => $owner->id,
-                'file_name' => 'apartment_complex_masterplan.pdf',
-                'file_path' => 'project-files/2/apartment_complex_masterplan.pdf',
-                'file_type' => 'application/pdf',
-                'file_size' => 4500000,
-                'description' => 'Master plan for the residential apartment complex',
-                'version' => '1.0',
-            ],
-            [
-                'project_id' => $project2->id,
-                'task_id' => $taskMap["project2_2"], // Architectural Design Finalization
-                'uploaded_by' => $engineer2->id,
-                'file_name' => 'architectural_designs.pdf',
-                'file_path' => 'project-files/2/architectural_designs.pdf',
-                'file_type' => 'application/pdf',
-                'file_size' => 5200000,
-                'description' => 'Complete architectural designs for all buildings',
-                'version' => '0.9',
-            ],
-        ];
-
-        foreach ($files as $file) {
-            File::create($file);
-        }
-
-        // Create reports
-        $reports = [
-            [
-                'project_id' => $project1->id,
+                'content' => 'تم إنجاز 45% من الهيكل الخرساني. لا توجد مشاكل كبيرة. سيتم الانتهاء من الطابق 15 هذا الأسبوع.',
+                'type' => ReportTypeEnum::WEEKLY,
+                'status' => ReportStatusEnum::APPROVED,
                 'created_by' => $engineer1->id,
-                'title' => 'Monthly Progress Report - Month 1',
-                'content' => "# Monthly Progress Report\n\n## Project Overview\nThe Commercial Office Building project has completed its first month of construction. Site preparation and initial foundation work have been completed according to schedule.\n\n## Completed Tasks\n- Site clearing and preparation\n- Initial excavation\n- Foundation marking\n\n## In Progress\n- Foundation construction\n\n## Upcoming Work\n- Structural framework\n- Basement construction\n\n## Issues and Concerns\nNo major issues to report. Weather conditions have been favorable for construction activities.",
-                'type' => 'monthly',
-                'status' => 'approved',
-                'submitted_at' => now()->subDays(15),
-                'approved_by' => $owner->id,
-                'approved_at' => now()->subDays(13),
-            ],
+                'submitted_at' => now()->subDays(7),
+                'approved_by' => $owner1->id,
+                'approved_at' => now()->subDays(5),
+            ]
+        );
+
+        Report::updateOrCreate(
+            ['project_id' => $project1->id, 'title' => 'تقرير التقدم الأسبوعي - الأسبوع 13'],
             [
-                'project_id' => $project1->id,
+                'content' => 'تقدم ممتاز في أعمال البناء. تم صب الطابق 16 و 17. المواد متوفرة بشكل جيد.',
+                'type' => ReportTypeEnum::WEEKLY,
+                'status' => ReportStatusEnum::SUBMITTED,
                 'created_by' => $engineer1->id,
-                'title' => 'Monthly Progress Report - Month 2',
-                'content' => "# Monthly Progress Report\n\n## Project Overview\nThe Commercial Office Building project has completed its second month of construction. Foundation work has been completed and structural framework has begun.\n\n## Completed Tasks\n- Foundation construction\n- Basement waterproofing\n- Ground floor slab\n\n## In Progress\n- Structural framework\n- Column installation\n\n## Upcoming Work\n- Electrical wiring planning\n- Plumbing rough-in\n\n## Issues and Concerns\nFoundation work took 3 days longer than expected due to unexpected soil conditions, but we've adjusted the schedule to compensate.",
-                'type' => 'monthly',
-                'status' => 'submitted',
-                'submitted_at' => now()->subDays(2),
-            ],
+                'submitted_at' => now()->subDays(1),
+            ]
+        );
+
+        Report::updateOrCreate(
+            ['project_id' => $project1->id, 'title' => 'تقرير شهري - يناير 2026'],
             [
-                'project_id' => $project2->id,
+                'content' => 'ملخص شهري: تم إنجاز الأساسات بالكامل وبدء أعمال الهيكل الخرساني. نسبة الإنجاز الكلية 25%.',
+                'type' => ReportTypeEnum::MONTHLY,
+                'status' => ReportStatusEnum::APPROVED,
+                'created_by' => $engineer1->id,
+                'submitted_at' => now()->subMonths(1),
+                'approved_by' => $owner1->id,
+                'approved_at' => now()->subMonths(1)->addDays(2),
+            ]
+        );
+
+        // Project 2 Reports
+        Report::updateOrCreate(
+            ['project_id' => $project2->id, 'title' => 'تقرير التقدم اليومي'],
+            [
+                'content' => 'تم استلام شحنة الحديد المسلح. سيتم البدء في صب الأعمدة غداً.',
+                'type' => ReportTypeEnum::DAILY,
+                'status' => ReportStatusEnum::DRAFT,
                 'created_by' => $engineer2->id,
-                'title' => 'Initial Project Report',
-                'content' => "# Initial Project Report\n\n## Project Overview\nThe Residential Apartment Complex project has begun with site survey and analysis. Initial findings show favorable conditions for construction.\n\n## Completed Tasks\n- Site survey and soil analysis\n- Initial meetings with local authorities\n\n## In Progress\n- Architectural design finalization\n- Permit acquisition\n\n## Upcoming Work\n- Site preparation\n- Foundation planning\n\n## Issues and Concerns\nSome concerns about drainage in the northeast corner of the site. Additional analysis recommended.",
-                'type' => 'progress',
-                'status' => 'approved',
-                'submitted_at' => now()->subDays(10),
-                'approved_by' => $owner->id,
-                'approved_at' => now()->subDays(8),
-            ],
-        ];
+            ]
+        );
 
-        foreach ($reports as $report) {
-            Report::create($report);
-        }
+        Report::updateOrCreate(
+            ['project_id' => $project2->id, 'title' => 'تقرير الأسبوع 24'],
+            [
+                'content' => 'تأخير بسيط في وصول مواد التكسية. تم التنسيق مع الموردين لتسريع الشحن.',
+                'type' => ReportTypeEnum::WEEKLY,
+                'status' => ReportStatusEnum::SUBMITTED,
+                'created_by' => $engineer3->id,
+                'submitted_at' => now()->subHours(12),
+            ]
+        );
 
-        // Create notifications
-        $notifications = [
+        // Project 3 Reports
+        Report::updateOrCreate(
+            ['project_id' => $project3->id, 'title' => 'تقرير دراسة الجدوى المبدئي'],
             [
-                'user_id' => $owner->id,
-                'title' => 'New Report Submitted',
-                'message' => 'Engineer One has submitted a new monthly report for the Commercial Office Building project.',
-                'type' => 'report',
-                'related_id' => 2, // Monthly Progress Report - Month 2
-                'related_type' => 'report',
-                'is_read' => false,
-            ],
-            [
-                'user_id' => $contractor1->id,
-                'title' => 'Resource Request Approved',
-                'message' => 'Your request for Crane has been approved by Project Owner.',
-                'type' => 'resource',
-                'related_id' => 4, // Crane request for Project 1
-                'related_type' => 'resource_request',
-                'is_read' => true,
-                'read_at' => now()->subDays(13),
-            ],
-            [
-                'user_id' => $engineer1->id,
-                'title' => 'Task Completed',
-                'message' => 'Contractor One has marked the "Foundation Construction" task as completed.',
-                'type' => 'task',
-                'related_id' => $taskMap["project1_2"], // Foundation Construction task
-                'related_type' => 'task',
-                'is_read' => true,
-                'read_at' => now()->subDays(11),
-            ],
-            [
-                'user_id' => $contractor2->id,
-                'title' => 'New Task Assigned',
-                'message' => 'Engineer Two has assigned you the "Permit Acquisition" task.',
-                'type' => 'task',
-                'related_id' => $taskMap["project2_3"], // Permit Acquisition task
-                'related_type' => 'task',
-                'is_read' => false,
-            ],
-            [
-                'user_id' => $owner->id,
-                'title' => 'Budget Alert',
-                'message' => 'The Commercial Office Building project is approaching 25% of its budget allocation.',
-                'type' => 'budget',
-                'related_id' => $project1->id, // Project 1
-                'related_type' => 'project',
-                'is_read' => false,
-            ],
-        ];
+                'content' => 'تم الانتهاء من 60% من دراسة الجدوى. النتائج الأولية إيجابية وتشير إلى جدوى المشروع.',
+                'type' => ReportTypeEnum::PROGRESS,
+                'status' => ReportStatusEnum::SUBMITTED,
+                'created_by' => $engineer1->id,
+                'submitted_at' => now()->subDays(3),
+            ]
+        );
 
-        foreach ($notifications as $notification) {
-            Notification::create($notification);
-        }
-
-        // Create a completed project for ratings
-        $completedProject = Project::create([
-            'name' => 'Small Office Renovation',
-            'description' => 'Renovation of a small office space including new flooring, walls, and electrical',
-            'location' => 'Downtown Business Center, Suite 300',
-            'start_date' => now()->subMonths(3),
-            'end_date' => now()->subDays(5),
-            'budget' => 150000.00,
-            'status' => 'completed',
-            'owner_id' => $owner->id,
-        ]);
-
-        // Add project members to completed project
-        ProjectMember::create([
-            'project_id' => $completedProject->id,
-            'user_id' => $owner->id,
-            'role_id' => $ownerRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(3),
-        ]);
-
-        ProjectMember::create([
-            'project_id' => $completedProject->id,
-            'user_id' => $engineer1->id,
-            'role_id' => $engineerRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(3),
-        ]);
-
-        ProjectMember::create([
-            'project_id' => $completedProject->id,
-            'user_id' => $contractor1->id,
-            'role_id' => $contractorRole->id,
-            'status' => 'active',
-            'joined_at' => now()->subMonths(3),
-        ]);
-
-        // Create ratings for the completed project
-        $ratings = [
+        // Project 4 Reports (Completed)
+        Report::updateOrCreate(
+            ['project_id' => $project4->id, 'title' => 'التقرير النهائي للمشروع'],
             [
-                'project_id' => $completedProject->id,
-                'rated_by' => $owner->id,
-                'rated_user_id' => $engineer1->id,
-                'rating' => 5,
-                'comment' => 'Excellent work on the design and oversight. Very professional and responsive.',
-            ],
-            [
-                'project_id' => $completedProject->id,
-                'rated_by' => $owner->id,
-                'rated_user_id' => $contractor1->id,
-                'rating' => 4,
-                'comment' => 'Good quality work, completed on time. Some minor issues with cleanup.',
-            ],
-            [
-                'project_id' => $completedProject->id,
-                'rated_by' => $engineer1->id,
-                'rated_user_id' => $contractor1->id,
-                'rating' => 4,
-                'comment' => 'Followed specifications well. Responsive to change requests.',
-            ],
-            [
-                'project_id' => $completedProject->id,
-                'rated_by' => $contractor1->id,
-                'rated_user_id' => $engineer1->id,
-                'rating' => 5,
-                'comment' => 'Clear designs and specifications. Always available for questions.',
-            ],
-            [
-                'project_id' => $completedProject->id,
-                'rated_by' => $contractor1->id,
-                'rated_user_id' => $owner->id,
-                'rating' => 5,
-                'comment' => 'Great client to work with. Clear requirements and prompt payments.',
-            ],
-        ];
+                'content' => 'تم الانتهاء من جميع الأعمال بنجاح. المنتجع جاهز للتشغيل. تم تسليم جميع المستندات.',
+                'type' => ReportTypeEnum::FINAL ,
+                'status' => ReportStatusEnum::APPROVED,
+                'created_by' => $engineer2->id,
+                'submitted_at' => now()->subMonths(1),
+                'approved_by' => $owner2->id,
+                'approved_at' => now()->subWeeks(3),
+            ]
+        );
 
-        foreach ($ratings as $rating) {
-            Rating::create($rating);
-        }
+        $this->command->info('✅ Created 7 reports');
 
-        // Update average ratings
-        $users = User::all();
-        foreach ($users as $user) {
-            $avgRating = Rating::where('rated_user_id', $user->id)->avg('rating');
-            if ($avgRating) {
-                $user->update(['average_rating' => $avgRating]);
-            }
-        }
+        // =============================================
+        // 📦 RESOURCES & REQUESTS
+        // =============================================
+        $this->command->info('Creating resources and requests...');
+
+        // Create some resources
+        $resource1 = Resource::updateOrCreate(
+            ['name' => 'إسمنت بورتلاندي'],
+            [
+                'description' => 'إسمنت عالي الجودة للأعمال الخرسانية',
+                'unit' => 'طن',
+                'unit_cost' => 350.00,
+            ]
+        );
+
+        $resource2 = Resource::updateOrCreate(
+            ['name' => 'حديد تسليح'],
+            [
+                'description' => 'حديد تسليح قطر 16 مم',
+                'unit' => 'طن',
+                'unit_cost' => 2800.00,
+            ]
+        );
+
+        $resource3 = Resource::updateOrCreate(
+            ['name' => 'رمل ناعم'],
+            [
+                'description' => 'رمل ناعم للخلط الخرساني',
+                'unit' => 'متر مكعب',
+                'unit_cost' => 85.00,
+            ]
+        );
+
+        $resource4 = Resource::updateOrCreate(
+            ['name' => 'كابلات كهربائية'],
+            [
+                'description' => 'كابلات كهربائية معزولة 4 مم',
+                'unit' => 'متر',
+                'unit_cost' => 12.50,
+            ]
+        );
+
+        // Resource Requests
+        ResourceRequest::updateOrCreate(
+            ['project_id' => $project1->id, 'resource_name' => 'إسمنت بورتلاندي - دفعة 5'],
+            [
+                'resource_id' => $resource1->id,
+                'task_id' => $task1_2->id,
+                'requested_by' => $contractor1->id,
+                'resource_type' => 'مواد بناء',
+                'quantity' => 500,
+                'unit' => 'طن',
+                'required_by' => now()->addWeeks(2),
+                'description' => 'مطلوب لاستكمال صب الطوابق 18-22',
+                'status' => ResourceRequestStatusEnum::APPROVED,
+                'approved_by' => $owner1->id,
+                'approved_at' => now()->subDays(3),
+            ]
+        );
+
+        ResourceRequest::updateOrCreate(
+            ['project_id' => $project1->id, 'resource_name' => 'حديد تسليح - دفعة 3'],
+            [
+                'resource_id' => $resource2->id,
+                'task_id' => $task1_2->id,
+                'requested_by' => $contractor1->id,
+                'resource_type' => 'مواد بناء',
+                'quantity' => 200,
+                'unit' => 'طن',
+                'required_by' => now()->addDays(10),
+                'description' => 'حديد للأعمدة والبلاطات',
+                'status' => ResourceRequestStatusEnum::PENDING,
+            ]
+        );
+
+        ResourceRequest::updateOrCreate(
+            ['project_id' => $project1->id, 'resource_name' => 'كابلات كهربائية'],
+            [
+                'resource_id' => $resource4->id,
+                'task_id' => $task1_3->id,
+                'requested_by' => $contractor2->id,
+                'resource_type' => 'مواد كهربائية',
+                'quantity' => 15000,
+                'unit' => 'متر',
+                'required_by' => now()->addMonths(2),
+                'description' => 'كابلات للتمديدات الكهربائية',
+                'status' => ResourceRequestStatusEnum::PENDING,
+            ]
+        );
+
+        ResourceRequest::updateOrCreate(
+            ['project_id' => $project2->id, 'resource_name' => 'خرسانة جاهزة'],
+            [
+                'resource_id' => null,
+                'task_id' => $task2_2->id,
+                'requested_by' => $contractor1->id,
+                'resource_type' => 'مواد بناء',
+                'quantity' => 1500,
+                'unit' => 'متر مكعب',
+                'required_by' => now()->addWeeks(1),
+                'description' => 'خرسانة جاهزة لصب السقف الرئيسي',
+                'status' => ResourceRequestStatusEnum::APPROVED,
+                'approved_by' => $owner1->id,
+                'approved_at' => now()->subDays(1),
+            ]
+        );
+
+        ResourceRequest::updateOrCreate(
+            ['project_id' => $project2->id, 'resource_name' => 'وحدات تكييف مركزي'],
+            [
+                'resource_id' => null,
+                'task_id' => $task2_3->id,
+                'requested_by' => $contractor1->id,
+                'resource_type' => 'معدات',
+                'quantity' => 50,
+                'unit' => 'وحدة',
+                'required_by' => now()->addMonths(3),
+                'description' => 'وحدات تكييف سعة 5 طن للمجمع',
+                'status' => ResourceRequestStatusEnum::REJECTED,
+                'notes' => 'يجب إعادة تقديم الطلب مع عروض أسعار محدثة',
+            ]
+        );
+
+        $this->command->info('✅ Created 4 resources and 5 resource requests');
+
+        // =============================================
+        // 📝 TASK UPDATES
+        // =============================================
+        $this->command->info('Creating task updates...');
+
+        TaskUpdate::updateOrCreate(
+            ['task_id' => $task1_2->id, 'user_id' => $contractor1->id, 'created_at' => now()->subDays(7)],
+            [
+                'old_status' => 'todo',
+                'new_status' => 'in_progress',
+                'comment' => 'بدأنا العمل على الهيكل الخرساني',
+                'progress_percentage' => 10,
+            ]
+        );
+
+        TaskUpdate::updateOrCreate(
+            ['task_id' => $task1_2->id, 'user_id' => $contractor1->id, 'created_at' => now()->subDays(3)],
+            [
+                'description' => 'تم الانتهاء من صب الطوابق 12-15',
+                'progress_percentage' => 35,
+                'hours_spent' => 120,
+            ]
+        );
+
+        TaskUpdate::updateOrCreate(
+            ['task_id' => $task1_2->id, 'user_id' => $contractor1->id, 'created_at' => now()->subDays(1)],
+            [
+                'description' => 'تم صب الطابق 16 و 17 بنجاح',
+                'progress_percentage' => 45,
+                'hours_spent' => 48,
+            ]
+        );
+
+        TaskUpdate::updateOrCreate(
+            ['task_id' => $task2_2->id, 'user_id' => $contractor1->id, 'created_at' => now()->subDays(5)],
+            [
+                'old_status' => 'backlog',
+                'new_status' => 'in_progress',
+                'comment' => 'بدء أعمال البناء الرئيسية',
+                'progress_percentage' => 15,
+            ]
+        );
+
+        TaskUpdate::updateOrCreate(
+            ['task_id' => $task5_1->id, 'user_id' => $engineer3->id, 'created_at' => now()->subDays(2)],
+            [
+                'description' => 'تم الانتهاء من التصميم الأولي للمكتبة المركزية',
+                'progress_percentage' => 25,
+                'hours_spent' => 40,
+            ]
+        );
+
+        $this->command->info('✅ Created 5 task updates');
+
+        // =============================================
+        // 📊 SUMMARY
+        // =============================================
+        $this->command->newLine();
+        $this->command->info('========================================');
+        $this->command->info('🎉 Test data seeding completed!');
+        $this->command->info('========================================');
+        $this->command->table(
+            ['Entity', 'Count'],
+            [
+                ['Users', User::count()],
+                ['Projects', Project::count()],
+                ['Tasks', Task::count()],
+                ['Reports', Report::count()],
+                ['Resource Requests', ResourceRequest::count()],
+                ['Resources', Resource::count()],
+                ['Task Updates', TaskUpdate::count()],
+            ]
+        );
+        $this->command->newLine();
+        $this->command->info('📧 Login Credentials (password: "password"):');
+        $this->command->table(
+            ['Role', 'Email'],
+            [
+                ['Admin', 'admin@novatrack.com'],
+                ['Owner', 'owner1@novatrack.com'],
+                ['Engineer', 'engineer1@novatrack.com'],
+                ['Contractor', 'contractor1@novatrack.com'],
+            ]
+        );
     }
 }

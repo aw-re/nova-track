@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\ProjectStatusEnum;
 
 class Project extends Model
 {
@@ -24,6 +25,7 @@ class Project extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'budget' => 'decimal:2',
+        'status' => ProjectStatusEnum::class,
     ];
 
     public function owner()
@@ -31,25 +33,16 @@ class Project extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function members()
-    {
-        return $this->hasMany(ProjectMember::class);
-    }
-    
     /**
      * Get all project members.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function projectMembers()
+    public function members()
     {
         return $this->hasMany(ProjectMember::class);
     }
 
     /**
      * Get all invitations for this project.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function invitations()
     {
@@ -58,8 +51,6 @@ class Project extends Model
 
     /**
      * Get all users who are members of this project.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users()
     {
@@ -90,4 +81,23 @@ class Project extends Model
     {
         return $this->hasMany(Rating::class);
     }
+
+    public function resources()
+    {
+        return $this->hasMany(Resource::class);
+    }
+
+    /**
+     * Calculate project progress based on completed tasks.
+     */
+    public function getProgressAttribute(): int
+    {
+        $totalTasks = $this->tasks()->count();
+        if ($totalTasks === 0) {
+            return 0;
+        }
+        $completedTasks = $this->tasks()->where('status', 'completed')->count();
+        return (int) round(($completedTasks / $totalTasks) * 100);
+    }
 }
+

@@ -26,13 +26,18 @@ class TaskPolicy
             return true;
         }
 
-        if ($user->hasRole('project_owner')) {
-            // Assuming Project Owner can view tasks in their projects
-            // Logic to be refined based on Project Owner relationship to Project
+        // Project Owner can view tasks in their own projects
+        if ($user->hasRole('project_owner') && $task->project->owner_id === $user->id) {
             return true;
         }
 
+        // Task assignee, creator, or assigner can view
         if ($user->id === $task->assigned_to || $user->id === $task->created_by || $user->id === $task->assigned_by) {
+            return true;
+        }
+
+        // Project members can view tasks in their projects
+        if ($task->project->members()->where('user_id', $user->id)->exists()) {
             return true;
         }
 

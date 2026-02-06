@@ -15,19 +15,23 @@ class RoleSeeder extends Seeder
         $roles = [
             [
                 'name' => 'admin',
+                'display_name' => 'Administrator',
                 'description' => 'System Administrator with full access',
             ],
             [
                 'name' => 'project_owner',
-                'description' => 'Owner of projects',
+                'display_name' => 'Project Owner',
+                'description' => 'Owner of projects who can manage and approve',
             ],
             [
                 'name' => 'engineer',
-                'description' => 'Project Engineer',
+                'display_name' => 'Engineer',
+                'description' => 'Project Engineer who assigns and manages tasks',
             ],
             [
                 'name' => 'contractor',
-                'description' => 'Project Contractor',
+                'display_name' => 'Contractor',
+                'description' => 'Contractor who executes tasks and requests resources',
             ],
         ];
 
@@ -38,6 +42,7 @@ class RoleSeeder extends Seeder
             );
         }
 
-        $this->command->info('Roles seeded successfully!');
+        $this->command->info('✅ Roles seeded successfully!');
     }
 }
+

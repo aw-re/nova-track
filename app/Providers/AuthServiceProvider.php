@@ -5,7 +5,11 @@ namespace App\Providers;
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\Report;
+use App\Models\ResourceRequest;
 use App\Policies\TaskPolicy;
+use App\Policies\ProjectPolicy;
+use App\Policies\ReportPolicy;
+use App\Policies\ResourceRequestPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -17,6 +21,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Task::class => TaskPolicy::class,
+        Project::class => ProjectPolicy::class,
+        Report::class => ReportPolicy::class,
+        ResourceRequest::class => ResourceRequestPolicy::class,
     ];
 
     /**
