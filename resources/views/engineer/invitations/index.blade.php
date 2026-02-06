@@ -4,43 +4,7 @@
 
 @section('page_title', 'Project Invitations')
 
-@section('sidebar')
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.dashboard') }}">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.projects.index') }}">
-            <i class="fas fa-project-diagram"></i> Projects
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.tasks.index') }}">
-            <i class="fas fa-tasks"></i> Tasks
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.reports.index') }}">
-            <i class="fas fa-file-alt"></i> Reports
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.resource-requests.index') }}">
-            <i class="fas fa-tools"></i> Resource Requests
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('engineer.files.index') }}">
-            <i class="fas fa-file"></i> Files
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="{{ route('engineer.invitations.index') }}">
-            <i class="fas fa-envelope"></i> Invitations
-        </a>
-    </li>
-@endsection
+
 
 @section('content')
     <div class="container-fluid">

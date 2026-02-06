@@ -4,41 +4,7 @@
 
 @section('page_title', 'Engineer Dashboard')
 
-@section('sidebar')
-    <div class="list-group list-group-flush">
-        <a href="{{ route('engineer.dashboard') }}"
-            class="list-group-item list-group-item-action bg-white text-primary fw-bold border-start border-4 border-primary">
-            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-        </a>
-        <a href="{{ route('engineer.tasks.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-tasks me-2"></i> Tasks
-        </a>
-        <a href="{{ route('engineer.projects.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-project-diagram me-2"></i> Projects
-        </a>
-        <a href="{{ route('engineer.reports.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-file-alt me-2"></i> Reports
-        </a>
-        <a href="{{ route('engineer.resource-requests.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-tools me-2"></i> Resource Requests
-        </a>
-        <a href="{{ route('engineer.files.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-file me-2"></i> Files
-        </a>
-        <a href="{{ route('engineer.invitations.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold d-flex justify-content-between align-items-center">
-            <div><i class="fas fa-envelope me-2"></i> Invitations</div>
-            @if(isset($invitationCount) && $invitationCount > 0)
-                <span class="badge bg-danger rounded-pill">{{ $invitationCount }}</span>
-            @endif
-        </a>
-    </div>
-@endsection
+
 
 @section('content')
     @if(isset($pendingInvitations) && $pendingInvitations->count() > 0)

@@ -1,8 +1,10 @@
+@props(['title', 'icon' => null, 'actions' => null, 'footer' => null])
+
 <div class="card glass-card mb-4 border-0 shadow-sm hover-shadow transition-all">
     <div
         class="card-header bg-transparent border-bottom-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
         <h5 class="mb-0 fw-bold text-primary">
-            @if(isset($icon))
+            @if($icon)
                 <i class="{{ $icon }} me-2"></i>
             @endif
             {{ $title }}

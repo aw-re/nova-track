@@ -4,53 +4,7 @@
 
 @section('page_title', 'Create New User')
 
-@section('sidebar')
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.dashboard') }}">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="{{ route('admin.users.index') }}">
-            <i class="fas fa-users"></i> Users
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.roles.index') }}">
-            <i class="fas fa-user-tag"></i> Roles
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.projects.index') }}">
-            <i class="fas fa-project-diagram"></i> Projects
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.resources.index') }}">
-            <i class="fas fa-tools"></i> Resources
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.reports.index') }}">
-            <i class="fas fa-file-alt"></i> Reports
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.activity-logs.index') }}">
-            <i class="fas fa-clipboard-list"></i> Activity Logs
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.notifications.index') }}">
-            <i class="fas fa-bell"></i> Notifications
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.settings.index') }}">
-            <i class="fas fa-cog"></i> Settings
-        </a>
-    </li>
-@endsection
+
 
 @section('content')
     <div class="card">

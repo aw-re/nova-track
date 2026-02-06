@@ -12,12 +12,14 @@ return [
     'task' => 'Task',
     'reports' => 'Reports',
     'resources' => 'Resources',
+    'resource_requests' => 'Resource Requests',
     'files' => 'Files',
     'users' => 'Users',
     'roles' => 'Roles',
     'activity_logs' => 'Activity Logs',
     'notifications' => 'Notifications',
     'settings' => 'Settings',
+    'invitations' => 'Invitations',
 
     // Stats
     'my_projects' => 'My Projects',
@@ -26,6 +28,8 @@ return [
     'pending_requests' => 'Pending Requests',
     'active_projects' => 'Active Projects',
     'completed_projects' => 'Completed Projects',
+    'total_users' => 'Total Users',
+    'completed_tasks' => 'Completed Tasks',
 
     // Tables & Lists
     'recent_projects' => 'Recent Projects',
@@ -37,6 +41,16 @@ return [
     'view_all' => 'View All',
     'view_all_projects' => 'View All Projects',
     'no_projects_found' => 'No projects found',
+    'user_distribution' => 'User Distribution',
+    'recent_activities' => 'Recent Activities',
+    'no_recent_activities' => 'No recent activities',
+    'all_projects' => 'All Projects',
+    'add_new_project' => 'Add New Project',
+    'search_by_name' => 'Search by name',
+    'all_statuses' => 'All Statuses',
+    'all_owners' => 'All Owners',
+    'reset' => 'Reset',
+    'projects_overview' => 'Projects Overview',
 
     // Statuses
     'status_planning' => 'Planning',
@@ -44,6 +58,31 @@ return [
     'status_on_hold' => 'On Hold',
     'status_completed' => 'Completed',
     'status_cancelled' => 'Cancelled',
+
+    // Auth
+    'login' => 'Login',
+    'register' => 'Register',
+    'welcome_back' => 'Welcome Back',
+    'login_prompt' => 'Sign in to access your dashboard',
+
+    // Welcome Page
+    'welcome_title' => 'Welcome',
+    'welcome_subtitle' => 'Next Generation Project Management',
+    'welcome_subheading' => 'Streamline your construction projects with advanced tracking, seamless collaboration, and real-time insights.',
+    'welcome_cta' => 'Go to Dashboard',
+    'get_started' => 'Get Started',
+    'learn_more' => 'Learn More',
+    'streamline_heading' => 'Streamline Your Workflow',
+    'streamline_subheading' => 'Powerful tools designed to help you build better, faster, and smarter.',
+    'feature_project_management' => 'Project Management',
+    'feature_project_management_desc' => 'Track every phase of your construction project from planning to delivery.',
+    'feature_task_management' => 'Task Management',
+    'feature_task_management_desc' => 'Assign, track, and complete tasks with ease ensuring no detail is missed.',
+    'feature_team_collaboration' => 'Team Collaboration',
+    'feature_team_collaboration_desc' => 'Connect engineers, contractors, and owners in one unified platform.',
+    'meet_our_team' => 'Meet Our Team',
+    'team_description' => 'The experts behind NovaTrack success.',
+    'copyright' => '&copy; :year NovaTrack. All rights reserved.',
 
     // Common
     'save' => 'Save',

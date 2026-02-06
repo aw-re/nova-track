@@ -27,6 +27,18 @@
     <link rel="stylesheet" href="{{ asset('css/novatrack.css') }}">
 
     <style>
+        /* Typography Improvements */
+        body {
+            font-family: 'Poppins', 'Cairo', sans-serif !important;
+            letter-spacing: normal !important;
+            /* Fix connected text issue */
+        }
+
+        [dir="rtl"] body {
+            text-align: right;
+            font-family: 'Cairo', sans-serif !important;
+        }
+
         .hero-section {
             background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
             color: white;
@@ -66,6 +78,21 @@
             color: white;
             transform: scale(1.1) rotate(5deg);
         }
+
+        /* Team Section Overrides */
+        .team-image-wrapper {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            margin: 0 auto 1.5rem;
+        }
+
+        .team-card:hover .team-image-wrapper {
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -74,7 +101,7 @@
     <nav class="navbar navbar-expand-lg navbar-light fixed-top glass-effect">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center gap-2" href="#">
-                <i class="fas fa-cube text-primary fs-3"></i>
+                <img src="{{ asset('images/logo.png') }}" alt="{{ __('app.app_name') }}" height="50">
                 <span class="brand-text">{{ __('app.app_name') }}</span>
             </a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -129,7 +156,8 @@
                             🚀 {{ __('app.welcome_subtitle') ?? 'Next Generation Project Management' }}
                         </span>
                     </div>
-                    <h1 class="display-3 fw-bold mb-4 leading-tight">{{ __('app.app_name') }}</h1>
+                    <!-- Removed leading-tight to improve readability -->
+                    <h1 class="display-3 fw-bold mb-4">{{ __('app.app_name') }}</h1>
                     <p class="lead text-white-50 mb-5 fs-4">{{ __('app.welcome_subheading') }}</p>
                     <div class="d-flex justify-content-center gap-3">
                         @auth
@@ -165,7 +193,7 @@
             <div class="row g-4">
                 <!-- Feature 1 -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm p-4 text-center hover-card">
+                    <div class="card h-100 border-0 shadow-sm p-4 text-center hover-card feature-card">
                         <div class="feature-icon-wrapper">
                             <i class="fas fa-project-diagram"></i>
                         </div>
@@ -175,7 +203,7 @@
                 </div>
                 <!-- Feature 2 -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm p-4 text-center hover-card">
+                    <div class="card h-100 border-0 shadow-sm p-4 text-center hover-card feature-card">
                         <div class="feature-icon-wrapper">
                             <i class="fas fa-tasks"></i>
                         </div>
@@ -185,7 +213,7 @@
                 </div>
                 <!-- Feature 3 -->
                 <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm p-4 text-center hover-card">
+                    <div class="card h-100 border-0 shadow-sm p-4 text-center hover-card feature-card">
                         <div class="feature-icon-wrapper">
                             <i class="fas fa-users"></i>
                         </div>
@@ -203,19 +231,19 @@
             <div class="row g-4 text-center">
                 <div class="col-md-3 col-6">
                     <div class="display-4 fw-bold text-primary mb-2">500+</div>
-                    <div class="text-muted fw-bold text-uppercase small ls-1">Projects</div>
+                    <div class="text-muted fw-bold text-uppercase small">Projects</div>
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="display-4 fw-bold text-secondary mb-2">1.2k</div>
-                    <div class="text-muted fw-bold text-uppercase small ls-1">Users</div>
+                    <div class="text-muted fw-bold text-uppercase small">Users</div>
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="display-4 fw-bold text-success mb-2">98%</div>
-                    <div class="text-muted fw-bold text-uppercase small ls-1">Completion Rate</div>
+                    <div class="text-muted fw-bold text-uppercase small">Completion Rate</div>
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="display-4 fw-bold text-warning mb-2">24/7</div>
-                    <div class="text-muted fw-bold text-uppercase small ls-1">Support</div>
+                    <div class="text-muted fw-bold text-uppercase small">Support</div>
                 </div>
             </div>
         </div>
@@ -228,92 +256,128 @@
                 <div class="col-lg-8 mx-auto">
                     <h2 class="fw-bold display-6 mb-3 text-dark">{{ __('app.meet_our_team') ?? 'Meet Our Team' }}</h2>
                     <p class="text-muted fs-5">
-                        {{ __('app.team_description') ?? 'The experts behind NovaTrack success' }}</p>
+                        {{ __('app.team_description') ?? 'The experts behind NovaTrack success' }}
+                    </p>
                 </div>
             </div>
 
             <div class="row g-4 justify-content-center">
                 <!-- Team Member 1 -->
                 <div class="col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm h-100 text-center hover-card">
-                        <div class="card-body p-3">
-                            <div class="mb-3 position-relative mx-auto"
-                                style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%;">
-                                <img src="{{ asset('images/AL-REYASHI.jpg') }}" alt="AL-REYASHI"
-                                    class="w-100 h-100 object-fit-cover">
+                    <div class="card team-card border-0 h-100 text-center">
+                        <div class="position-relative overflow-hidden rounded-circle mx-auto mb-3 shadow-lg"
+                            style="width: 150px; height: 150px;">
+                            <img src="{{ asset('images/AL-REYASHI.jpg') }}" alt="Al-Reyashi"
+                                class="w-100 h-100 object-fit-cover transition-transform duration-500 hover-scale">
+                        </div>
+                        <div class="card-body p-0">
+                            <h5 class="fw-bold text-dark mb-1">Eng. Al-Reyashi</h5>
+                            <small class="text-primary fw-bold text-uppercase ls-1">Project Manager</small>
+                            <div class="mt-3 d-flex justify-content-center gap-2 opacity-0 team-social transition-all">
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="text-muted hover-primary"><i class="fas fa-envelope"></i></a>
                             </div>
-                            <h6 class="fw-bold mb-1">Al-Reyashi</h6>
-                            <small class="text-primary fw-bold text-uppercase" style="font-size: 0.7rem;">Team
-                                Lead</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Team Member 2 -->
                 <div class="col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm h-100 text-center hover-card">
-                        <div class="card-body p-3">
-                            <div class="mb-3 position-relative mx-auto"
-                                style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%;">
-                                <img src="{{ asset('images/Al-Mansour.jpg') }}" alt="Al-Mansour"
-                                    class="w-100 h-100 object-fit-cover">
+                    <div class="card team-card border-0 h-100 text-center">
+                        <div class="position-relative overflow-hidden rounded-circle mx-auto mb-3 shadow-lg"
+                            style="width: 150px; height: 150px;">
+                            <img src="{{ asset('images/Al-Mansour.jpg') }}" alt="Al-Mansour"
+                                class="w-100 h-100 object-fit-cover transition-transform duration-500 hover-scale">
+                        </div>
+                        <div class="card-body p-0">
+                            <h5 class="fw-bold text-dark mb-1">Eng. Al-Mansour</h5>
+                            <small class="text-primary fw-bold text-uppercase ls-1">Senior Developer</small>
+                            <div class="mt-3 d-flex justify-content-center gap-2 opacity-0 team-social transition-all">
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-github"></i></a>
                             </div>
-                            <h6 class="fw-bold mb-1">Al-Mansour</h6>
-                            <small class="text-primary fw-bold text-uppercase"
-                                style="font-size: 0.7rem;">Developer</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Team Member 3 -->
                 <div class="col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm h-100 text-center hover-card">
-                        <div class="card-body p-3">
-                            <div class="mb-3 position-relative mx-auto"
-                                style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%;">
-                                <img src="{{ asset('images/Al-Najhi.jpg') }}" alt="Al-Najhi"
-                                    class="w-100 h-100 object-fit-cover">
+                    <div class="card team-card border-0 h-100 text-center">
+                        <div class="position-relative overflow-hidden rounded-circle mx-auto mb-3 shadow-lg"
+                            style="width: 150px; height: 150px;">
+                            <img src="{{ asset('images/Al-Najhi.jpg') }}" alt="Al-Najhi"
+                                class="w-100 h-100 object-fit-cover transition-transform duration-500 hover-scale">
+                        </div>
+                        <div class="card-body p-0">
+                            <h5 class="fw-bold text-dark mb-1">Eng. Al-Najhi</h5>
+                            <small class="text-primary fw-bold text-uppercase ls-1">Backend Engineer</small>
+                            <div class="mt-3 d-flex justify-content-center gap-2 opacity-0 team-social transition-all">
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-github"></i></a>
                             </div>
-                            <h6 class="fw-bold mb-1">Al-Najhi</h6>
-                            <small class="text-primary fw-bold text-uppercase"
-                                style="font-size: 0.7rem;">Developer</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Team Member 4 -->
                 <div class="col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm h-100 text-center hover-card">
-                        <div class="card-body p-3">
-                            <div class="mb-3 position-relative mx-auto"
-                                style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%;">
-                                <img src="{{ asset('images/Handhal.jpg') }}" alt="Handhal"
-                                    class="w-100 h-100 object-fit-cover">
+                    <div class="card team-card border-0 h-100 text-center">
+                        <div class="position-relative overflow-hidden rounded-circle mx-auto mb-3 shadow-lg"
+                            style="width: 150px; height: 150px;">
+                            <img src="{{ asset('images/Handhal.jpg') }}" alt="Handhal"
+                                class="w-100 h-100 object-fit-cover transition-transform duration-500 hover-scale">
+                        </div>
+                        <div class="card-body p-0">
+                            <h5 class="fw-bold text-dark mb-1">Eng. Handhal</h5>
+                            <small class="text-primary fw-bold text-uppercase ls-1">Frontend Engineer</small>
+                            <div class="mt-3 d-flex justify-content-center gap-2 opacity-0 team-social transition-all">
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-dribbble"></i></a>
                             </div>
-                            <h6 class="fw-bold mb-1">Handhal</h6>
-                            <small class="text-primary fw-bold text-uppercase"
-                                style="font-size: 0.7rem;">Developer</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Team Member 5 -->
                 <div class="col-md-4 col-lg-2">
-                    <div class="card border-0 shadow-sm h-100 text-center hover-card">
-                        <div class="card-body p-3">
-                            <div class="mb-3 position-relative mx-auto"
-                                style="width: 120px; height: 120px; overflow: hidden; border-radius: 50%;">
-                                <img src="{{ asset('images/Naji.jpg') }}" alt="Naji"
-                                    class="w-100 h-100 object-fit-cover">
+                    <div class="card team-card border-0 h-100 text-center">
+                        <div class="position-relative overflow-hidden rounded-circle mx-auto mb-3 shadow-lg"
+                            style="width: 150px; height: 150px;">
+                            <img src="{{ asset('images/Naji.jpg') }}" alt="Naji"
+                                class="w-100 h-100 object-fit-cover transition-transform duration-500 hover-scale">
+                        </div>
+                        <div class="card-body p-0">
+                            <h5 class="fw-bold text-dark mb-1">Eng. Naji</h5>
+                            <small class="text-primary fw-bold text-uppercase ls-1">QA Engineer</small>
+                            <div class="mt-3 d-flex justify-content-center gap-2 opacity-0 team-social transition-all">
+                                <a href="#" class="text-muted hover-primary"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="text-muted hover-primary"><i class="fas fa-bug"></i></a>
                             </div>
-                            <h6 class="fw-bold mb-1">Naji</h6>
-                            <small class="text-primary fw-bold text-uppercase"
-                                style="font-size: 0.7rem;">Developer</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <style>
+            .hover-scale:hover {
+                transform: scale(1.1);
+            }
+
+            .team-card:hover .team-social {
+                opacity: 1 !important;
+                transform: translateY(-5px);
+            }
+
+            .team-social {
+                transition: all 0.3s ease-in-out;
+            }
+
+            .hover-primary:hover {
+                color: var(--primary-color) !important;
+            }
+        </style>
     </section>
 
     <!-- Footer -->

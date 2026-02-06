@@ -81,6 +81,7 @@ html[dir="rtl"] body {
     box-shadow: var(--shadow-sm);
     padding: 1rem 1.5rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    z-index: 1000;
 }
 
 .navbar-brand {
@@ -88,6 +89,11 @@ html[dir="rtl"] body {
     color: var(--primary-color) !important;
     font-size: 1.5rem;
     letter-spacing: -0.5px;
+}
+
+/* Ensure dropdowns are above everything */
+.dropdown-menu {
+    z-index: 1050 !important;
 }
 
 /* Sidebar Modernization */
@@ -98,9 +104,10 @@ html[dir="rtl"] body {
     background: var(--gradient-sidebar);
     box-shadow: var(--shadow-lg);
     border-right: none;
-    padding-top: 2rem;
+    padding-top: 1rem;
     transition: all 0.3s ease;
     margin-left: 0;
+    z-index: 900;
 }
 
 #wrapper.toggled .sidebar {
@@ -368,6 +375,7 @@ html[dir="rtl"] .sidebar .nav-link:hover {
 ::-webkit-scrollbar-thumb {
     background: #c7c7c7;
     border-radius: 4px;
+    border: 1px solid #f1f1f1;
 }
 
 ::-webkit-scrollbar-thumb:hover {

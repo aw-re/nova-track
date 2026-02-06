@@ -4,34 +4,7 @@
 
 @section('page_title', __('app.owner_dashboard'))
 
-@section('sidebar')
-    <div class="list-group list-group-flush">
-        <a href="{{ route('owner.dashboard') }}"
-            class="list-group-item list-group-item-action bg-white text-primary fw-bold border-start border-4 border-primary">
-            <i class="fas fa-tachometer-alt me-2"></i> {{ __('app.dashboard') }}
-        </a>
-        <a href="{{ route('owner.projects.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-project-diagram me-2"></i> {{ __('app.projects') }}
-        </a>
-        <a href="{{ route('owner.tasks.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-tasks me-2"></i> {{ __('app.tasks') }}
-        </a>
-        <a href="{{ route('owner.reports.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-file-alt me-2"></i> {{ __('app.reports') }}
-        </a>
-        <a href="{{ route('owner.resource-requests.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-tools me-2"></i> {{ __('app.resources') }}
-        </a>
-        <a href="{{ route('owner.files.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-file me-2"></i> {{ __('app.files') }}
-        </a>
-    </div>
-@endsection
+
 
 @section('content')
     <!-- Statistics Row -->

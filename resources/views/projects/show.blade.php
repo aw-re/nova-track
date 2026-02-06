@@ -4,59 +4,7 @@
 
 @section('page_title', $project->name)
 
-@section('sidebar')
-    @if(auth()->user()->isAdmin())
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-        </li>
-    @elseif(auth()->user()->isProjectOwner())
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('owner.dashboard') }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-        </li>
-    @elseif(auth()->user()->isEngineer())
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('engineer.dashboard') }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-        </li>
-    @elseif(auth()->user()->isContractor())
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('contractor.dashboard') }}">
-                <i class="fas fa-tachometer-alt"></i> Dashboard
-            </a>
-        </li>
-    @endif
-    
-    <li class="nav-item">
-        <a class="nav-link active" href="{{ route('projects.index') }}">
-            <i class="fas fa-project-diagram"></i> Projects
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-tasks"></i> Tasks
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-tools"></i> Resources
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-file-alt"></i> Reports
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-cog"></i> Settings
-        </a>
-    </li>
-@endsection
+
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">

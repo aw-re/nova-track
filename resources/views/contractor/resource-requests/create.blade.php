@@ -4,33 +4,7 @@
 
 @section('page_title', 'Create New Resource Request')
 
-@section('sidebar')
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('contractor.dashboard') }}">
-            <i class="fas fa-tachometer-alt"></i> Dashboard
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('contractor.projects.index') }}">
-            <i class="fas fa-project-diagram"></i> Projects
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('contractor.tasks.index') }}">
-            <i class="fas fa-tasks"></i> Tasks
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="{{ route('contractor.resource-requests.index') }}">
-            <i class="fas fa-tools"></i> Resource Requests
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('contractor.files.index') }}">
-            <i class="fas fa-file"></i> Files
-        </a>
-    </li>
-@endsection
+
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">

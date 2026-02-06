@@ -12,12 +12,14 @@ return [
     'task' => 'المهمة',
     'reports' => 'التقارير',
     'resources' => 'الموارد',
+    'resource_requests' => 'طلبات الموارد',
     'files' => 'الملفات',
     'users' => 'المستخدمين',
     'roles' => 'الأدوار',
     'activity_logs' => 'سجل النشاطات',
     'notifications' => 'الإشعارات',
     'settings' => 'الإعدادات',
+    'invitations' => 'الدعوات',
 
     // Stats
     'my_projects' => 'مشاريعي',
@@ -26,6 +28,8 @@ return [
     'pending_requests' => 'طلبات معلقة',
     'active_projects' => 'مشاريع نشطة',
     'completed_projects' => 'مشاريع مكتملة',
+    'total_users' => 'إجمالي المستخدمين',
+    'completed_tasks' => 'مهام مكتملة',
 
     // Tables & Lists
     'recent_projects' => 'أحدث المشاريع',
@@ -37,6 +41,16 @@ return [
     'view_all' => 'عرض الكل',
     'view_all_projects' => 'عرض كل المشاريع',
     'no_projects_found' => 'لا توجد مشاريع',
+    'user_distribution' => 'توزيع المستخدمين',
+    'recent_activities' => 'أحدث النشاطات',
+    'no_recent_activities' => 'لا توجد نشاطات حديثة',
+    'all_projects' => 'كل المشاريع',
+    'add_new_project' => 'إضافة مشروع جديد',
+    'search_by_name' => 'بحث بالاسم',
+    'all_statuses' => 'كل الحالات',
+    'all_owners' => 'كل الملاك',
+    'reset' => 'إعادة تعيين',
+    'projects_overview' => 'نظرة عامة على المشاريع',
 
     // Statuses
     'status_planning' => 'تخطيط',
@@ -44,6 +58,31 @@ return [
     'status_on_hold' => 'معلق',
     'status_completed' => 'مكتمل',
     'status_cancelled' => 'ملغي',
+
+    // Auth
+    'login' => 'تسجيل الدخول',
+    'register' => 'إنشاء حساب',
+    'welcome_back' => 'مرحباً بعودتك',
+    'login_prompt' => 'سجل الدخول للوصول إلى لوحة التحكم',
+
+    // Welcome Page
+    'welcome_title' => 'مرحباً',
+    'welcome_subtitle' => 'الجيل القادم لإدارة المشاريع',
+    'welcome_subheading' => 'قم بتبسيط مشاريع البناء الخاصة بك مع تتبع متقدم، تعاون سلس، ورؤى في الوقت الحقيقي.',
+    'welcome_cta' => 'الذهاب للوحة التحكم',
+    'get_started' => 'ابدأ الآن',
+    'learn_more' => 'اعرف المزيد',
+    'streamline_heading' => 'تسهيل سير عملك',
+    'streamline_subheading' => 'أدوات قوية مصممة لمساعدتك على البناء بشكل أفضل وأسرع وأذكى.',
+    'feature_project_management' => 'إدارة المشاريع',
+    'feature_project_management_desc' => 'تتبع كل مرحلة من مشروع البناء الخاص بك من التخطيط إلى التسليم.',
+    'feature_task_management' => 'إدارة المهام',
+    'feature_task_management_desc' => 'تعيين ومتابعة وإكمال المهام بسهولة لضمان عدم تفويت أي تفاصيل.',
+    'feature_team_collaboration' => 'تعاون الفريق',
+    'feature_team_collaboration_desc' => 'ربط المهندسين والمقاولين والملاك في منصة موحدة.',
+    'meet_our_team' => 'تعرف على فريقنا',
+    'team_description' => 'الخبراء وراء نجاح نوفا تراك.',
+    'copyright' => '&copy; :year نوفا تراك. جميع الحقوق محفوظة.',
 
     // Common
     'save' => 'حفظ',

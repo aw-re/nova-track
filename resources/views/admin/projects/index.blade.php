@@ -4,38 +4,7 @@
 
 @section('page_title', __('app.projects_overview'))
 
-@section('sidebar')
-    <div class="list-group list-group-flush">
-        <a href="{{ route('admin.dashboard') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-tachometer-alt me-2"></i> {{ __('app.dashboard') }}
-        </a>
-        <a href="{{ route('admin.users.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-users me-2"></i> {{ __('app.users') }}
-        </a>
-        <a href="{{ route('admin.roles.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-user-tag me-2"></i> {{ __('app.roles') }}
-        </a>
-        <a href="{{ route('admin.projects.index') }}"
-            class="list-group-item list-group-item-action bg-white text-primary fw-bold border-start border-4 border-primary">
-            <i class="fas fa-project-diagram me-2"></i> {{ __('app.projects') }}
-        </a>
-        <a href="{{ route('admin.tasks.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-tasks me-2"></i> {{ __('app.tasks') }}
-        </a>
-        <a href="{{ route('admin.activity-logs.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-clipboard-list me-2"></i> {{ __('app.activity_logs') }}
-        </a>
-        <a href="{{ route('admin.resources.index') }}"
-            class="list-group-item list-group-item-action bg-transparent text-secondary fw-bold">
-            <i class="fas fa-boxes me-2"></i> {{ __('app.resources') }}
-        </a>
-    </div>
-@endsection
+
 
 @section('content')
     <x-app-card title="{{ __('app.all_projects') }}" icon="fas fa-project-diagram">
