@@ -63,23 +63,6 @@ Route::get('lang/{locale}', function ($locale) {
 use App\Http\Controllers\Owner\TaskUpdateController;
 
 
-
-
-
-Route::prefix('admin')->group(function () {
-    Route::resource('reports', \App\Http\Controllers\Admin\ReportController::class);
-
-    // إضافة مسارات الموافقة والرفض
-    Route::post('reports/{report}/approve', [\App\Http\Controllers\Admin\ReportController::class, 'approve'])
-        ->name('admin.reports.approve');
-
-    Route::post('reports/{report}/reject', [\App\Http\Controllers\Admin\ReportController::class, 'reject'])
-        ->name('admin.reports.reject');
-});
-
-
-
-
 // Authentication Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -131,6 +114,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
 
     // Report Management
     Route::resource('reports', AdminReportController::class);
+    Route::post('/reports/{report}/approve', [AdminReportController::class, 'approve'])->name('reports.approve');
+    Route::post('/reports/{report}/reject', [AdminReportController::class, 'reject'])->name('reports.reject');
 
     // Activity Logs
     Route::get('/activity-logs', [AdminActivityLogController::class, 'index'])->name('activity-logs.index');
